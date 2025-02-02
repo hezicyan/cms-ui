@@ -1,249 +1,1031 @@
-{% macro rows(url, contest_url, translation, xsrf_form_html,
-    actual_phase, task, submissions,
-    can_use_tokens, can_play_token, can_play_token_now,
-    submissions_download_allowed, official) -%}
-{#
-Render a submission table with all (un)official submissions passed.
+/* Always show the scrollbar */
 
-url (Url): the URL instance referring to the root of CWS.
-contest_url (Url): the URL instance referring to the main contest page.
-translation (Translation): locale to use to show messages.
-xsrf_form_html (str): input element for the XSRF protection.
-actual_phase (int): phase of the contest.
-task (Task): the task this page refers to.
-submissions ([Submission]): all the submissions of the participation on this
-    task.
-can_use_tokens (bool): whether tokens are allowed for this task.
-can_play_token (bool): if can_use_tokens is true, whether the user has a
-    token to play (possibly after waiting some time).
-can_play_token_now (bool): if can_play_tokens is true, whether the user
-    does not need to wait before playing a token.
-submissions_download_allowed (boolean): whether to allow users to download
-    their submissions.
-official (boolean): whether to display only the official (true) or unofficial
-    (false) submissions in the submissions list.
-#}
-{% set gettext = translation.gettext %}
-{% set score_type = get_score_type(dataset=task.active_dataset) %}
-{% set show_date = not submissions|map(attribute="timestamp")|all("today") %}
-<table class="table table-bordered table-striped submission_list">
-{% set num_cols = 2 %}
-<colgroup>
-{% if show_date %}
-<col class="datetime"/>
-{% else %}
-<col class="time"/>
-{% endif %}
-<col class="status"/>
-{% if score_type is defined %}
-{% if 0 < score_type.max_public_score < score_type.max_score %}
-<col class="public_score"/>
-<col class="total_score"/>
-{% set num_cols = num_cols + 2 %}
-{% else %}
-<col class="total_score"/>
-{% set num_cols = num_cols + 1 %}
-{% endif %}
-{% endif %}
-{% if submissions_download_allowed %}
-<col class="files"/>
-{% set num_cols = num_cols + 1 %}
-{% endif %}
-{% if can_use_tokens and actual_phase == 0 %}
-<col class="token"/>
-{% set num_cols = num_cols + 1 %}
-{% endif %}
-</colgroup>
-<thead>
-<tr>
-{% if show_date %}
-  <th class="datetime">{% trans %}Date and time{% endtrans %}</th>
-{% else %}
-  <th class="time">{% trans %}Time{% endtrans %}</th>
-{% endif %}
-  <th class="status">{% trans %}Status{% endtrans %}</th>
-{% if score_type is defined %}
-{% if 0 < score_type.max_public_score < score_type.max_score %}
-  <th class="public_score">{% trans %}Public score{% endtrans %}</th>
-  <th class="total_score">{% trans %}Total score{% endtrans %}</th>
-{% else %}
-  <th class="total_score">{% trans %}Score{% endtrans %}</th>
-{% endif %}
-{% endif %}
-{% if submissions_download_allowed %}
-  <th class="files">{% trans %}Files{% endtrans %}</th>
-{% endif %}
-{% if can_use_tokens and actual_phase == 0 %}
-  <th class="token">{% trans %}Token{% endtrans %}</th>
-{% endif %}
-</tr>
-</thead>
-<tbody>
-{% set num_displayed = (submissions|selectattr("official")|list|length if official else submissions|rejectattr("official")|list|length) > 0 %}
-{% if num_displayed == 0 %}
-<tr>
-  <td colspan="{{ num_cols }}" class="no_submissions">{% trans %}no submissions{% endtrans %}</td>
-</tr>
-{% else %}
-{% for s in submissions|sort(attribute="timestamp")|reverse %}
-  {% if s.official == official %}
-      {{ row(
-          url,
-          contest_url,
-          translation,
-          xsrf_form_html,
-          actual_phase,
-          s,
-          submissions|length - loop.index0,
-          show_date,
-          can_use_tokens,
-          can_play_token,
-          can_play_token_now,
-          submissions_download_allowed) }}
-  {% endif %}
-{% endfor %}
-{% endif %}
-</tbody>
-</table>
-{%- endmacro %}
+body {
+    overflow-y: scroll;
+}
 
-{% macro row(url, contest_url, translation, xsrf_form_html,
-   actual_phase, s, s_num, show_date,
-   can_use_tokens, can_play_token, can_play_token_now,
-   submissions_download_allowed) -%}
-{#
-Render a row in a submission table.
+/* Add some padding to the top of the page to avoid the static navbar from
+   covering the content on the top. Since (due to responsive CSS) the navbar
+   stops being static when the display is small enough, we have to add a
+   media-query rule
+ */
 
-url (Url): the URL instance referring to the root of CWS.
-contest_url (Url): the URL instance referring to the main contest page.
-translation (Translation): locale to use to show messages.
-xsrf_form_html (str): input element for the XSRF protection.
-actual_phase (int): phase of the contest.
-s (Submission): the submission to display.
-s_num (int): 1-based position of the submission in the list of
-    submissions of the currently logged in participaiton on this task.
-show_date (bool): whether to display only the time or also the date.
-can_use_tokens (bool): whether tokens are allowed for this task.
-can_play_token (bool): if can_use_tokens is true, whether the user has a
-    token to play (possibly after waiting some time).
-can_play_token_now (bool): if can_play_tokens is true, whether the user
-    does not need to wait before playing a token.
-submissions_download_allowed (bool): whether to allow users to download
-    their submissions.
-#}
+@media (min-width: 980px) {
+    #main {
+        position: relative;
+        padding-top: 20px;
+    }
+}
 
-{% set gettext = translation.gettext %}
-{% set task = s.task %}
-{% set score_type = get_score_type(dataset=task.active_dataset) %}
-{% set sr = s.get_result(task.active_dataset) or undefined %}
-{% set status = sr.get_status() if sr is defined else SubmissionResult.COMPILING %}
-<tr data-submission="{{ s_num }}" data-status="{{ status }}">
-{% if show_date %}
-<td class="datetime">{{ s.timestamp|format_datetime }}</td>
-{% else %}
-<td class="time">{{ s.timestamp|format_time }}</td>
-{% endif %}
-<td class="status">
-{% if status == SubmissionResult.COMPILING %}
-{% trans %}Compiling...{% endtrans %}
-<img class="details" src="{{ url("static", "loading.gif") }}" />
-{% elif status == SubmissionResult.COMPILATION_FAILED %}
-{% trans %}Compilation failed{% endtrans %}
-<a class="details">{% trans %}details{% endtrans %}</a>
-{% elif status == SubmissionResult.EVALUATING %}
-{% trans %}Evaluating...{% endtrans %}
-<img class="details" src="{{ url("static", "loading.gif") }}" />
-{% elif status == SubmissionResult.SCORING %}
-{% trans %}Scoring...{% endtrans %}
-<img class="details" src="{{ url("static", "loading.gif") }}" />
-{% elif status == SubmissionResult.SCORED %}
-{% trans %}Evaluated{% endtrans %}
-<a class="details">{% trans %}details{% endtrans %}</a>
-{% endif %}
-</td>
-{% if score_type is defined and score_type.max_public_score > 0 %}
-{% if status == SubmissionResult.SCORED %}
-<td class="public_score {{ get_score_class(sr.public_score, score_type.max_public_score, task.score_precision) }}">
-{{ score_type.format_score(sr.public_score, score_type.max_public_score, sr.public_score_details, task.score_precision, translation=translation) }}
-</td>
-{% else %}
-<td class="public_score undefined">
-{% trans %}N/A{% endtrans %}
-</td>
-{% endif %}
-{% endif %}
-{% if score_type is defined and score_type.max_public_score < score_type.max_score %}
-{% if status == SubmissionResult.SCORED and (s.token is not none or actual_phase == 3) %}
-<td class="total_score {{ get_score_class(sr.score, score_type.max_score, task.score_precision) }}">
-{{ score_type.format_score(sr.score, score_type.max_score, sr.score_details, task.score_precision, translation=translation) }}
-</td>
-{% else %}
-<td class="total_score undefined">
-{% trans %}N/A{% endtrans %}
-</td>
-{% endif %}
-{% endif %}
-{% if submissions_download_allowed %}
-<td class="files">
-{# We replace '.%l' with the actual language only when it occurs as an extension at the end of the string and only when #}
-{# there isn't another file with that name. This allows to securily reverse the replacement and should work great in #}
-{# the common case. Yet, it still allows the marginal case of both 'foo.%l' and 'foo.c' in the submission format. #}
-{% if s.files|length == 0 %}
-<button class="btn btn-secondary disabled">
-  {% trans %}None{% endtrans %}
-</button>
-{% elif s.files|length == 1 %}
-  {% set filename = next(iter(s.files.keys())) %}
-  {% if s.language is not none %}
-      {% set filename = filename|replace(".%l", (s.language|to_language).source_extension) %}
-  {% endif %}
-<a class="btn btn-primary" href="{{ contest_url("tasks", task.name, "submissions", s_num, "files", filename) }}">{% trans %}Download{% endtrans %}</a>
-{% else %}
-<div class="btn-group">
-  <button class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-      {% trans %}Download{% endtrans %}
-  </button>
-  <ul class="dropdown-menu">
-  {% for filename in s.files %}
-      {% if s.language is not none %}
-          {% set temp_filename = filename|replace(".%l", (s.language|to_language).source_extension) %}
-          {% if temp_filename not in s.files %}
-              {% set filename = temp_filename %}
-          {% endif %}
-      {% endif %}
-      <li>
-          <a class="dropdown-item" href="{{ contest_url("tasks", task.name, "submissions", s_num, "files", filename) }}">
-              {{ filename }}
-          </a>
-      </li>
-  {% endfor %}
-  </ul>
-</div>
-{% endif %}
-</td>
-{% endif %}
-{% if can_use_tokens and actual_phase == 0 %}
-<td class="token">
-{% if s.token is not none %}
-<button class="btn btn-secondary disabled">{% trans %}Played{% endtrans %}</button>
-{% else %}
-  {% if can_play_token_now %}
-  {# Can play a token right now: show the button. #}
-<form action="{{ contest_url("tasks", task.name, "submissions", s_num, "token") }}" method="POST">
-  {{ xsrf_form_html|safe }}
-  <button type="submit" class="btn btn-warning">{% trans %}Play!{% endtrans %}</button>
-</form>
-  {% elif can_play_token or tokens_info[1] is not none %}
-  {# Can play a token, but only after a min_interval expires,
-                 or after the next token generation: ask to wait. #}
-<button class="btn btn-warning disabled">{% trans %}Wait...{% endtrans %}</button>
-  {% else %}
-  {# No tokens to play at this moment, nor more will be
-                 generated: tell the user there are no tokens. #}
-<button class="btn btn-secondary disabled">{% trans %}No tokens{% endtrans %}</button>
-  {% endif %}
-{% endif %}
-</td>
-{% endif %}
-</tr>
-{%- endmacro %}
+/* Remove the on-hover coloring of rows in tables with table-nohover class */
+
+.table.table-nohover > tbody > tr:hover > td, 
+.table.table-nohover > tbody > tr:hover > th {
+    background-color: transparent !important;
+}
+
+/** Announcements, questions, answers and messages **/
+
+/* Almost "copy" Bootstrap rules for alert-info */
+
+div.announcement_list div.announcement,
+div.question_list div.question,
+div.question_list div.answer,
+div.question_list div.no_answer,
+div.message_list div.message {
+    padding: 14px 18px 14px 14px;
+    border-radius: .375rem; /* Bootstrap 5 border radius */
+    min-height: 18px;
+    margin-bottom: 18px;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+    color: #3A87AD;
+    border: 1px solid #BCD8F1;
+    background-color: #D9EDF7;
+}
+
+/* Styling for the question, answer, and no-answer divs */
+
+div.question_list div.question {
+    margin-bottom: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+div.question_list div.answer,
+div.question_list div.no_answer {
+    margin-top: 0;
+    border-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+/* Display the timestamp on the top right corner of the box */
+
+div.announcement_list div.announcement h4.subject,
+div.question_list div.question h4.subject,
+div.question_list div.answer h4.subject,
+div.message_list div.message h4.subject {
+    display: inline;
+    margin-right: 5px;
+}
+
+div.announcement_list div.announcement span.timestamp,
+div.question_list div.question span.timestamp,
+div.question_list div.answer span.timestamp,
+div.message_list div.message span.timestamp {
+    float: right;
+    margin-left: 5px;
+}
+
+/* If the subject is missing, display a note in italic */
+
+div.announcement_list div.announcement h4.subject.empty,
+div.question_list div.question h4.subject.empty,
+div.question_list div.answer h4.subject.empty,
+div.message_list div.message h4.subject.empty {
+    font-style: italic;
+}
+
+/* Add some distance between the announcement header and its content */
+/* Also make sure the line breaks in the body text are preserved */
+
+div.announcement_list div.announcement div.body,
+div.question_list div.question div.body,
+div.question_list div.answer div.body,
+div.message_list div.message div.body {
+    padding-top: 5px;
+    clear: both;
+    white-space: pre-line;
+}
+
+/* Give some style to the "no answer" placeholder */
+
+div.question_list div.no_answer {
+    font-size: 1.2em;
+    font-style: italic;
+    margin: 0 0 18px;
+    text-align: center;
+}
+
+/* Add some margins to the headers, except the ones after the page-header */
+h2 {
+    margin: 30px 0 15px;
+}
+
+div.page-header + h2 {
+    margin: 0 0 15px;
+}
+
+/* Enhancements to the question form */
+div.question_submit form {
+    width: 100%;
+    margin: 0;
+}
+
+div.question_submit div.control-group:last-child {
+    margin: 0;
+}
+
+@media (min-width: 768px) and (max-width: 979px) {
+    div.question_submit input,
+    div.question_submit textarea {
+        width: 328px;
+    }
+}
+
+@media (min-width: 980px) and (max-width: 1199px) {
+    div.question_submit input,
+    div.question_submit textarea {
+        width: 490px;
+    }
+}
+
+@media (min-width: 1200px) {
+    div.question_submit input,
+    div.question_submit textarea {
+        width: 660px;
+    }
+}
+
+div.question_submit textarea {
+    resize: vertical;
+    min-height: 75px;
+    max-height: 275px;
+}
+
+/** Login **/
+div.login_box form {
+    margin-bottom: 0;
+}
+
+div.login_box form fieldset div.control-group:last-child {
+    margin-bottom: 0;
+}
+
+div.login_container {
+    margin-bottom: 20px;
+}
+
+div.login_box {
+    max-width: 450px;
+    margin: 0 auto;
+}
+
+@media (max-width: 979px) {
+    div.navbar.navbar-fixed-top {
+        margin-bottom: 20px;
+    }
+}
+
+@media (min-width: 768px) {
+    div.login_box fieldset div.control-group div.controls input {
+        width: 280px;
+    }
+}
+
+@media (max-width: 979px) and (min-height: 488px) {
+    div.login_container {
+        position: fixed;
+        top: 50%;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: 0;
+        padding: 0 20px;
+    }
+
+    div.login_box {
+        /* The total height of the box is 2*60 (padding) + 60 (h2) +
+           (27+9) (p) + 2*(28+18) (inputs) + 40 (buttons) = 348px; */
+        margin-top: -174px;
+    }
+}
+
+/* Login Container */
+@media (min-width: 980px) and (min-height: 468px) {
+    div.login_container {
+        position: fixed;
+        top: 50%;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: 0;
+        padding: 0 20px;
+    }
+
+    div.login_box {
+        /* The total height of the box is 2*60 (padding) + 60 (h2) +
+           (27+9) (p) + 2*(28+18) (inputs) + 40 (buttons) = 348px; */
+        margin-top: -174px;
+    }
+}
+
+/** Register **/
+div.register_box form {
+    margin-bottom: 0;
+}
+
+div.register_box form fieldset div.control-group:last-child {
+    margin-bottom: 0;
+}
+
+div.register_box {
+    max-width: 450px;
+    margin: 20px auto;
+}
+
+/* Some fixes and enhancements of Bootstrap */
+@media (max-width: 767px) {
+    .modal {
+        position: fixed;
+        top: 50%;
+        left: 10px;
+        right: 10px;
+        width: auto;
+        margin: -250px 0 0;
+    }
+
+    .modal.fade.show {
+        top: 50%;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 979px) {
+    .modal.wide {
+        width: 600px;
+        margin-left: -300px;
+    }
+}
+
+@media (min-width: 980px) and (max-width: 1199px) {
+    .modal.wide {
+        width: 780px;
+        margin-left: -390px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .modal.wide {
+        width: 970px;
+        margin-left: -485px;
+    }
+}
+
+/*** Task statement ***/
+
+.task_description .statement.no_statement {
+    font-size: 1.2em;
+    font-style: italic;
+    text-align: center;
+}
+
+.task_description .statement.one_statement {
+    text-align: center;
+}
+
+@media (max-width: 767px) {
+    .task_description .statement.many_statements .main_statements {
+        margin-bottom: 15px;
+    }
+
+    .task_description .statement.many_statements .all_statements div {
+        max-height: 280px;
+    }
+}
+
+@media (min-width: 768px) {
+    .task_description .statement.many_statements {
+        min-height: 238px;
+        position: relative;
+    }
+
+    .task_description .statement.many_statements .all_statements {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        box-sizing: border-box;
+        margin: 0;
+    }
+
+    .task_description .statement.many_statements .all_statements div {
+        height: 100%;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 979px) {
+    .task_description .statement.many_statements .main_statements {
+        width: 290px;
+    }
+
+    .task_description .statement.many_statements .all_statements {
+        width: 228px;
+    }
+}
+
+@media (min-width: 980px) and (max-width: 1199px) {
+    .task_description .statement.many_statements .main_statements {
+        width: 380px;
+    }
+
+    .task_description .statement.many_statements .all_statements {
+        width: 300px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .task_description .statement.many_statements .main_statements {
+        width: 470px;
+    }
+
+    .task_description .statement.many_statements .all_statements {
+        width: 370px;
+    }
+}
+
+.task_description .statement.many_statements .main_statements {
+    text-align: center;
+}
+
+.task_description .statement.many_statements .main_statements p {
+    text-align: left;
+}
+
+.task_description .statement.many_statements .main_statements p:last-child {
+    margin-bottom: 5px;
+}
+
+.task_description .statement.many_statements .main_statements a.btn {
+    min-width: 50%;
+    margin: 5px;
+}
+
+.task_description .statement.many_statements .all_statements {
+    padding: 5px;
+}
+
+.task_description .statement.many_statements .all_statements div {
+    box-sizing: border-box;
+    overflow-y: auto;
+    padding: 0;
+}
+
+.task_description .statement.many_statements .all_statements div ul {
+    margin: 5px 5px 5px 25px;
+}
+
+/*** Compilation commands */
+
+.compilation_command_cell {
+    padding: 5px !important;
+}
+
+.compilation_command {
+    display: block;
+}
+
+.compilation_command + .compilation_command {
+    margin-top: 5px;
+}
+
+/*** Unread count */
+
+#unread_count {
+    float: right;
+}
+
+#unread_count.no_unread {
+    display: none;
+}
+
+/*** Token rules */
+
+td.token_rules p:last-child {
+    margin-bottom: 0;
+}
+
+/*** Notifications */
+
+.notifications {
+    position: fixed;
+    top: 60px;
+    width: 0;
+    right: 0;
+    bottom: 0;
+    overflow: visible;
+    z-index: 1;
+}
+
+.notifications .notification {
+    width: 160px;
+    float: right;
+    margin-right: 20px;
+    clear: both;
+}
+
+/*** Task score */
+
+.task_score_container {
+    display: flex;
+    justify-content: space-evenly;
+    font-weight: bold;
+}
+
+.task_score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 0;
+}
+
+.task_score .score img {
+    margin-left: 5px;
+}
+
+.task_score.score_0 {
+    background-color: hsla(0, 100%, 50%, 0.4);
+}
+
+.task_score.score_0_100 {
+    background-color: hsla(60, 100%, 50%, 0.4);
+}
+
+.task_score.score_100 {
+    background-color: hsla(120, 100%, 50%, 0.4);
+}
+
+/*** Submit a solution */
+
+#submit_solution {
+    margin-bottom: 20px;
+}
+
+#submit_solution form {
+    margin-bottom: 0;
+}
+
+#submit_solution .control-group {
+    margin-bottom: 0;
+}
+
+#submit_solution .control-group:last-of-type {
+    margin-top: 10px;
+}
+
+#submit_solution .control-label {
+    width: 100px;
+    padding-top: 4px;
+    margin-bottom: 4px;
+}
+
+#submit_solution .controls {
+    margin-left: 110px;
+}
+
+#submit_solution input[type="file"] {
+    height: auto;
+    line-height: 18px;
+}
+
+/*** Submissions table */
+
+.submission_list colgroup col.time,
+.submission_list colgroup col.datetime {
+    width: 1%;
+}
+
+.submission_list colgroup col.status {
+    width: 20%;
+}
+
+.submission_list colgroup col.public_score {
+    width: 20%;
+}
+
+.submission_list colgroup col.total_score {
+    width: 20%;
+}
+
+.submission_list colgroup col.files {
+    width: 10%;
+}
+
+.submission_list colgroup col.token {
+    width: 10%;
+}
+
+.submission_list tbody tr td.no_submissions {
+    font-style: italic;
+    text-align: center !important;
+}
+
+.submission_list tbody tr td.time,
+.submission_list tbody tr td.datetime {
+    white-space: nowrap;
+}
+
+.submission_list tbody tr td.status .details {
+    float: right;
+    cursor: pointer;
+}
+
+.submission_list tbody tr td.files,
+.submission_list tbody tr td.token {
+    padding: 3px;
+}
+
+.submission_list tbody tr td.files .btn,
+.submission_list tbody tr td.token .btn {
+    box-sizing: border-box;
+    width: 100%;
+    white-space: nowrap;
+}
+
+.submission_list tbody tr td.token form {
+    display: inline;
+}
+
+.submission_list td.public_score.undefined {
+    color: #AAA;
+}
+
+.submission_list td.public_score.score_0 {
+    background-color: hsla(0, 100%, 50%, 0.4);
+}
+
+.submission_list tr:hover td.public_score.score_0 {
+    background-color: hsla(0, 100%, 50%, 0.5);
+}
+
+.submission_list td.public_score.score_0_100 {
+    background-color: hsla(60, 100%, 50%, 0.4);
+}
+
+.submission_list tr:hover td.public_score.score_0_100 {
+    background-color: hsla(60, 100%, 50%, 0.5);
+}
+
+.submission_list td.public_score.score_100 {
+    background-color: hsla(120, 100%, 50%, 0.4);
+}
+
+.submission_list tr:hover td.public_score.score_100 {
+    background-color: hsla(120, 100%, 50%, 0.5);
+}
+
+.submission_list td.total_score.undefined {
+    color: #AAA;
+}
+
+.submission_list td.total_score.score_0 {
+    background-color: hsla(0, 100%, 50%, 0.7);
+}
+
+.submission_list tr:hover td.total_score.score_0 {
+    background-color: hsla(0, 100%, 50%, 0.8);
+}
+
+.submission_list td.total_score.score_0_100 {
+    background-color: hsla(60, 100%, 50%, 0.7);
+}
+
+.submission_list tr:hover td.total_score.score_0_100 {
+    background-color: hsla(60, 100%, 50%, 0.8);
+}
+
+.submission_list td.total_score.score_100 {
+    background-color: hsla(120, 100%, 50%, 0.7);
+}
+
+.submission_list tr:hover td.total_score.score_100 {
+    background-color: hsla(120, 100%, 50%, 0.8);
+}
+
+/*** Submission details */
+
+#submission_detail .modal-body {
+    position: relative;
+    height: 400px;
+}
+
+#submission_detail .modal-body .loading {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 16px;
+    font-style: italic;
+    margin-top: -16px; /* half the height of the image */
+}
+
+#submission_detail .modal-body .loading img {
+    display: block;
+    height: 32px;
+    width: 32px;
+    margin: 0 auto 12px;
+}
+
+#submission_detail .modal-body {
+    overflow-y: scroll;
+}
+
+#submission_detail .modal-body h3 {
+    margin-bottom: 15px;
+}
+
+#submission_detail .modal-body h3:not(:first-of-type) {
+    margin-top: 30px;
+}
+
+#submission_detail .subtask.open {
+    margin-bottom: 20px;
+}
+
+#submission_detail .subtask-head {
+    font-size: 16px;
+    line-height: 20px;
+    border: none;
+    border-radius: .375rem; /* Bootstrap border-radius */
+    background-color: #E0E0E0;
+    cursor: pointer;
+    height: 20px;
+    padding: 4px;
+    margin-bottom: 10px;
+    box-shadow: 0 0 2px 2px #D0D0D0 inset;
+}
+
+#submission_detail .subtask.open .subtask-head {
+    margin-bottom: 15px;
+}
+
+#submission_detail .subtask .subtask-head i {
+    margin: 2px;
+}
+
+#submission_detail .subtask .subtask-head .score {
+    float: right;
+    font-weight: bold;
+    display: inline-block;
+    border-radius: .375rem; /* Bootstrap border-radius */
+    width: 20%;
+    text-align: center;
+    height: 24px;
+    margin-top: -2px;
+    margin-right: -2px;
+    color: white;
+    line-height: 24px;
+}
+
+#submission_detail .subtask.undefined .subtask-head .score {
+    background-color: #babdb6;
+}
+
+#submission_detail .subtask.correct .subtask-head .score {
+    background-color: #4e9a06;
+}
+
+#submission_detail .subtask.notcorrect .subtask-head .score {
+    background-color: #cc0000;
+}
+
+#submission_detail .subtask.partiallycorrect .subtask-head .score {
+    background-color: #edd400;
+}
+
+#submission_detail .subtask:not(.open) .subtask-body {
+    display: none;
+}
+
+#submission_detail table.testcase-list {
+    table-layout: fixed;
+    width: 100%;
+}
+
+#submission_detail table.testcase-list thead th.idx {
+    width: 5%;
+}
+
+#submission_detail table.testcase-list thead th.outcome {
+    width: 15%;
+}
+
+#submission_detail table.testcase-list thead th.execution-time,
+#submission_detail table.testcase-list thead th.memory-used {
+    width: 100px;
+}
+
+#submission_detail table.testcase-list tbody tr:not(.undefined) td.outcome {
+    padding: 5px;
+}
+
+#submission_detail table.testcase-list tbody tr:not(.undefined) td.outcome .outcome {
+    display: inline-block;
+    width: 100%;
+    height: 24px;
+    line-height: 24px;
+    border-radius: .375rem; /* Bootstrap border-radius */
+    box-sizing: border-box;
+    color: white;
+    padding-left: 5px;
+}
+
+#submission_detail table.testcase-list tbody tr.correct td.outcome .outcome {
+    background-color: #4e9a06;
+}
+
+#submission_detail table.testcase-list tbody tr.notcorrect td.outcome .outcome {
+    background-color: #cc0000;
+}
+
+#submission_detail table.testcase-list tbody tr.partiallycorrect td.outcome .outcome {
+    background-color: #edd400;
+}
+
+/*** per-user time box */
+
+.per_user_time p:last-child {
+    margin-bottom: 0;
+}
+
+/*** Countdown */
+
+#countdown_box {
+    text-align: center;
+    color: #333333;
+    margin: 0 0 8px;
+}
+
+#countdown_box.hidden {
+    display: none;
+}
+
+#countdown_label {
+    color: #999999;
+}
+
+/*** Server time */
+
+#server_time_box {
+    text-align: center;
+    color: #333333;
+    margin: 0 0 8px;
+}
+
+#server_time_label {
+    color: #999999;
+}
+
+/*** License notice */
+
+.license_notice {
+    display: block;
+    text-align: center;
+    padding: 0 6%;
+    font-size: 11px;
+}
+
+/*** Attachments */
+
+#attachments ul {
+    margin-left: 0;
+    list-style-type: none;
+    column-count: 3;
+    column-gap: 8px;
+}
+
+#attachments ul li {
+    break-inside: avoid;
+}
+
+#attachments ul li a {
+    display: block;
+    height: 36px;
+    margin-bottom: 8px;
+    padding: 6px;
+    text-align: left;
+    border-radius: .375rem; /* Bootstrap border-radius */
+    text-decoration: none;
+    color: #333;
+}
+
+#attachments ul li a:hover {
+    background-color: #E3E3E3;
+    border-radius: .375rem; /* Add border-radius on hover for consistent design */
+}
+
+#attachments ul li img {
+    float: left;
+    margin: 2px 8px 2px 2px;
+}
+
+#attachments ul li .first_line {
+    display: block;
+    height: 18px;
+    overflow: hidden;
+}
+
+#attachments ul li .name {
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: bold;
+}
+
+#attachments ul li .size {
+    float: right;
+    font-style: italic;
+}
+
+#attachments ul li .type {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/** Test interface */
+
+.test_interface .nav-tabs {
+    display: flex;
+    justify-content: space-between;
+}
+
+.test_interface .nav-tabs .nav-item {
+    width: 33.33%;
+}
+
+.test_interface .nav-tabs .nav-link {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    text-align: center;
+}
+
+.test_interface .tab-content {
+    overflow: visible;
+}
+
+.submit_test {
+    margin-bottom: 20px;
+}
+
+.submit_test form {
+    margin-bottom: 0;
+}
+
+.submit_test .form-group {
+    margin-bottom: 0;
+}
+
+.submit_test .form-group:last-of-type {
+    margin-top: 10px;
+}
+
+.submit_test .form-label {
+    width: 100px;
+    padding-top: 4px;
+    margin-bottom: 4px;
+}
+
+.submit_test .form-control {
+    margin-left: 110px;
+}
+
+.submit_test input[type="file"] {
+    height: auto;
+    line-height: 18px;
+}
+
+.user_test_list colgroup col.time,
+.user_test_list colgroup col.datetime {
+    width: 1%;
+}
+
+.user_test_list colgroup col.status {
+    width: 20%;
+}
+
+.user_test_list colgroup col.execution_time {
+    width: 3%;
+}
+
+.user_test_list colgroup col.memory {
+    width: 3%;
+}
+
+.user_test_list colgroup col.input {
+    width: 16%;
+}
+
+.user_test_list colgroup col.output {
+    width: 16%;
+}
+
+.user_test_list colgroup col.files {
+    width: 10%;
+}
+
+.user_test_list tbody tr td.no_user_tests {
+    font-style: italic;
+    text-align: center !important;
+}
+
+.user_test_list tbody tr td.time,
+.user_test_list tbody tr td.datetime {
+    white-space: nowrap;
+}
+
+.user_test_list tbody tr td.status .details {
+    float: right;
+    cursor: pointer;
+}
+
+.user_test_list tbody tr td.time.undefined,
+.user_test_list tbody tr td.memory.undefined {
+    color: #AAA;
+    white-space: nowrap;
+}
+
+.user_test_list tbody tr td.input,
+.user_test_list tbody tr td.output,
+.user_test_list tbody tr td.files {
+    padding: 3px;
+}
+
+.user_test_list tbody tr td.input .btn,
+.user_test_list tbody tr td.output .btn,
+.user_test_list tbody tr td.files .btn {
+    box-sizing: border-box;
+    width: 100%;
+    white-space: nowrap;
+}
+
+#user_test_detail .modal-body {
+    position: relative;
+    height: 400px;
+}
+
+#user_test_detail .modal-body .loading {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 16px;
+    font-style: italic;
+    margin-top: -16px;
+}
+
+#user_test_detail .modal-body .loading img {
+    display: block;
+    height: 32px;
+    width: 32px;
+    margin: 0 auto 12px;
+}
+
+#lang {
+    width: 100px;
+}
+
+/** Printing interface */
+
+#printjob_list tbody tr td.no_printjobs {
+    font-style: italic;
+    text-align: center !important;
+}
+
+/* Contest selection page */
+
+.contest-list {
+    width: 60%;
+    margin: auto;
+    margin-top: 50px;
+}
+
+.contest-list ul {
+    padding: 0;
+}
+
+.contest-list li:first-child > a {
+    border-radius: 6px 6px 0 0;
+}
+
+.contest-list li:last-child > a {
+    border-radius: 0 0 6px 6px;
+}
+
+.contest-list li > a {
+    display: block;
+    margin: 0 0 -1px;
+    padding: 8px 14px;
+    background-color: white;
+    border: 1px solid #e5e5e5;
+    text-decoration: none;
+    color: inherit;
+}
+
+
