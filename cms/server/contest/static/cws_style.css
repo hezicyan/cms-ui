@@ -4,7 +4,7 @@ body {
     overflow-y: scroll;
 }
 
-/* Add some padding to the top of the page to avoid the static navbar from 
+/* Add some padding to the top of the page to avoid the static navbar from
    covering the content on the top. Since (due to responsive CSS) the navbar
    stops being static when the display is small enough, we have to add a
    media-query rule
@@ -18,9 +18,7 @@ body {
 }
 
 /* Remove the on-hover coloring of rows in tables with table-nohover class */
-
-.table.table-nohover > tbody > tr:hover > td, 
-.table.table-nohover > tbody > tr:hover > th {
+.table.table-nohover > tbody > tr:hover > td, .table.table-nohover > tbody > tr:hover > th {
     background-color: transparent !important;
 }
 
@@ -34,7 +32,7 @@ div.question_list div.answer,
 div.question_list div.no_answer,
 div.message_list div.message {
     padding: 14px 18px 14px 14px;
-    border-radius: .375rem; /* Bootstrap 5 border radius */
+    border-radius: 4px;
     min-height: 18px;
     margin-bottom: 18px;
     text-shadow: 0 1px 0 rgba(255,255,255,0.5);
@@ -42,8 +40,6 @@ div.message_list div.message {
     border: 1px solid #BCD8F1;
     background-color: #D9EDF7;
 }
-
-/* Styling for the question, answer, and no-answer divs */
 
 div.question_list div.question {
     margin-bottom: 0;
@@ -58,6 +54,7 @@ div.question_list div.no_answer {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
+
 
 /* Display the timestamp on the top right corner of the box */
 
@@ -108,6 +105,7 @@ div.question_list div.no_answer {
 }
 
 /* Add some margins to the headers, except the ones after the page-header */
+
 h2 {
     margin: 30px 0 15px;
 }
@@ -117,6 +115,7 @@ div.page-header + h2 {
 }
 
 /* Enhancements to the question form */
+
 div.question_submit form {
     width: 100%;
     margin: 0;
@@ -154,6 +153,7 @@ div.question_submit textarea {
 }
 
 /** Login **/
+
 div.login_box form {
     margin-bottom: 0;
 }
@@ -201,7 +201,6 @@ div.login_box {
     }
 }
 
-/* Login Container */
 @media (min-width: 980px) and (min-height: 468px) {
     div.login_container {
         position: fixed;
@@ -221,6 +220,7 @@ div.login_box {
 }
 
 /** Register **/
+
 div.register_box form {
     margin-bottom: 0;
 }
@@ -235,43 +235,47 @@ div.register_box {
 }
 
 /* Some fixes and enhancements of Bootstrap */
+/* For mobile devices (max-width: 767px) */
 @media (max-width: 767px) {
-    .modal {
+    .modal-dialog {
         position: fixed;
         top: 50%;
         left: 10px;
         right: 10px;
         width: auto;
-        margin: -250px 0 0;
-    }
-
-    .modal.fade.show {
-        top: 50%;
+        transform: translateY(-50%); /* Vertically center */
     }
 }
 
+/* For medium screens (768px to 979px) */
 @media (min-width: 768px) and (max-width: 979px) {
-    .modal.wide {
+    .modal-dialog.modal-wide {
         width: 600px;
-        margin-left: -300px;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
+/* For large screens (980px to 1199px) */
 @media (min-width: 980px) and (max-width: 1199px) {
-    .modal.wide {
+    .modal-dialog.modal-wide {
         width: 780px;
-        margin-left: -390px;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
+/* For extra large screens (1200px and above) */
 @media (min-width: 1200px) {
-    .modal.wide {
+    .modal-dialog.modal-wide {
         width: 970px;
-        margin-left: -485px;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
-/*** Task statement ***/
+
+/*** Task statement */
 
 .task_description .statement.no_statement {
     font-size: 1.2em;
@@ -304,6 +308,7 @@ div.register_box {
         top: 0;
         right: 0;
         bottom: 0;
+        -moz-box-sizing: border-box;
         box-sizing: border-box;
         margin: 0;
     }
@@ -365,6 +370,7 @@ div.register_box {
 }
 
 .task_description .statement.many_statements .all_statements div {
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
     overflow-y: auto;
     padding: 0;
@@ -487,6 +493,7 @@ td.token_rules p:last-child {
     line-height: 18px;
 }
 
+
 /*** Submissions table */
 
 .submission_list colgroup col.time,
@@ -536,6 +543,7 @@ td.token_rules p:last-child {
 
 .submission_list tbody tr td.files .btn,
 .submission_list tbody tr td.token .btn {
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
     width: 100%;
     white-space: nowrap;
@@ -602,23 +610,26 @@ td.token_rules p:last-child {
 }
 
 /*** Submission details */
-
+/* Modal body styling */
 #submission_detail .modal-body {
     position: relative;
     height: 400px;
+    overflow-y: auto; /* Ensure the content scrolls if it exceeds the height */
 }
 
+/* Loading indicator positioning */
 #submission_detail .modal-body .loading {
     position: absolute;
     top: 50%;
-    left: 0;
-    right: 0;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centers the loading spinner vertically and horizontally */
     text-align: center;
     font-size: 16px;
     font-style: italic;
-    margin-top: -16px; /* half the height of the image */
+    margin-top: 0; /* No need for margin-top adjustment anymore */
 }
 
+/* Loading spinner styling */
 #submission_detail .modal-body .loading img {
     display: block;
     height: 32px;
@@ -626,10 +637,7 @@ td.token_rules p:last-child {
     margin: 0 auto 12px;
 }
 
-#submission_detail .modal-body {
-    overflow-y: scroll;
-}
-
+/* Styling for modal body headers */
 #submission_detail .modal-body h3 {
     margin-bottom: 15px;
 }
@@ -646,7 +654,7 @@ td.token_rules p:last-child {
     font-size: 16px;
     line-height: 20px;
     border: none;
-    border-radius: .375rem; /* Bootstrap border-radius */
+    border-radius: 5px;
     background-color: #E0E0E0;
     cursor: pointer;
     height: 20px;
@@ -667,7 +675,7 @@ td.token_rules p:last-child {
     float: right;
     font-weight: bold;
     display: inline-block;
-    border-radius: .375rem; /* Bootstrap border-radius */
+    border-radius: 5px;
     width: 20%;
     text-align: center;
     height: 24px;
@@ -724,7 +732,8 @@ td.token_rules p:last-child {
     width: 100%;
     height: 24px;
     line-height: 24px;
-    border-radius: .375rem; /* Bootstrap border-radius */
+    border-radius: 5px;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
     color: white;
     padding-left: 5px;
@@ -741,6 +750,7 @@ td.token_rules p:last-child {
 #submission_detail table.testcase-list tbody tr.partiallycorrect td.outcome .outcome {
     background-color: #edd400;
 }
+
 
 /*** per-user time box */
 
@@ -790,12 +800,28 @@ td.token_rules p:last-child {
 #attachments ul {
     margin-left: 0;
     list-style-type: none;
+    -webkit-column-count: 3;
+    -webkit-column-gap: 8px;
+    -moz-column-count: 3;
+    -moz-column-gap: 8px;
     column-count: 3;
     column-gap: 8px;
 }
 
 #attachments ul li {
+    -webkit-column-break-inside: avoid;
+    -webkit-break-inside: avoid;
+    -moz-break-inside: avoid;
     break-inside: avoid;
+}
+
+/* this is a really ugly hack to simulate the no-break behavior on firefox */
+@-moz-document url-prefix() {
+    #attachments ul li {
+        display: table;
+        table-layout: fixed;
+        width: 100%;
+    }
 }
 
 #attachments ul li a {
@@ -804,14 +830,10 @@ td.token_rules p:last-child {
     margin-bottom: 8px;
     padding: 6px;
     text-align: left;
-    border-radius: .375rem; /* Bootstrap border-radius */
-    text-decoration: none;
-    color: #333;
 }
 
 #attachments ul li a:hover {
     background-color: #E3E3E3;
-    border-radius: .375rem; /* Add border-radius on hover for consistent design */
 }
 
 #attachments ul li img {
@@ -837,6 +859,9 @@ td.token_rules p:last-child {
 #attachments ul li .size {
     float: right;
     font-style: italic;
+    /* the size floats on right of the first line if there's enough space.
+       otherwise (if the name is very long) it gets shifted down,
+       "disappearing" because the first line has overflow: hidden */
 }
 
 #attachments ul li .type {
@@ -849,17 +874,14 @@ td.token_rules p:last-child {
 
 /** Test interface */
 
-.test_interface .nav-tabs {
-    display: flex;
-    justify-content: space-between;
-}
-
-.test_interface .nav-tabs .nav-item {
-    width: 33.33%;
-}
-
-.test_interface .nav-tabs .nav-link {
+.test_interface .nav-tabs li {
     display: block;
+    width: 33%;
+}
+
+.test_interface .nav-tabs li a {
+    display: block;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
     width: 100%;
     text-align: center;
@@ -877,21 +899,21 @@ td.token_rules p:last-child {
     margin-bottom: 0;
 }
 
-.submit_test .form-group {
+.submit_test .control-group {
     margin-bottom: 0;
 }
 
-.submit_test .form-group:last-of-type {
+.submit_test .control-group:last-of-type {
     margin-top: 10px;
 }
 
-.submit_test .form-label {
+.submit_test .control-label {
     width: 100px;
     padding-top: 4px;
     margin-bottom: 4px;
 }
 
-.submit_test .form-control {
+.submit_test .controls {
     margin-left: 110px;
 }
 
@@ -959,6 +981,7 @@ td.token_rules p:last-child {
 .user_test_list tbody tr td.input .btn,
 .user_test_list tbody tr td.output .btn,
 .user_test_list tbody tr td.files .btn {
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
     width: 100%;
     white-space: nowrap;
@@ -967,17 +990,17 @@ td.token_rules p:last-child {
 #user_test_detail .modal-body {
     position: relative;
     height: 400px;
+    overflow-y: auto; /* Ensure content can scroll if it exceeds the height */
 }
 
 #user_test_detail .modal-body .loading {
     position: absolute;
     top: 50%;
-    left: 0;
-    right: 0;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Vertically and horizontally center */
     text-align: center;
     font-size: 16px;
     font-style: italic;
-    margin-top: -16px;
 }
 
 #user_test_detail .modal-body .loading img {
@@ -986,6 +1009,7 @@ td.token_rules p:last-child {
     width: 32px;
     margin: 0 auto 12px;
 }
+
 
 #lang {
     width: 100px;
@@ -1011,10 +1035,14 @@ td.token_rules p:last-child {
 }
 
 .contest-list li:first-child > a {
+    -webkit-border-radius: 6px 6px 0 0;
+    -moz-border-radius: 6px 6px 0 0;
     border-radius: 6px 6px 0 0;
 }
 
 .contest-list li:last-child > a {
+    -webkit-border-radius: 0 0 6px 6px;
+    -moz-border-radius: 0 0 6px 6px;
     border-radius: 0 0 6px 6px;
 }
 
@@ -1024,7 +1052,4 @@ td.token_rules p:last-child {
     padding: 8px 14px;
     background-color: white;
     border: 1px solid #e5e5e5;
-    text-decoration: none;
-    color: inherit;
 }
-
