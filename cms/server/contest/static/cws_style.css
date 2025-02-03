@@ -4,7 +4,7 @@ body {
     overflow-y: scroll;
 }
 
-/* Add some padding to the top of the page to avoid the static navbar from
+/* Add some padding to the top of the page to avoid the static navbar from 
    covering the content on the top. Since (due to responsive CSS) the navbar
    stops being static when the display is small enough, we have to add a
    media-query rule
