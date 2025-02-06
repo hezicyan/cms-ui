@@ -48,35 +48,37 @@ var utils = new CMS.CWSUtils("{{ url() }}", "{{ contest_url() }}", "{{ contest.n
 
 {% block body %}
     <div id="navigation_bar" class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <div class="container-fluid">
+        <div class="container-fluid d-flex justify-content-between">
             <a class="navbar-brand" href="{{ contest_url() }}">{{ contest.description }}</a>
-    {% if available_translations|length > 1 %}
-            <div class="navbar-text ml-auto">
-                <select id="lang" class="form-select" onchange="utils.switch_lang()">
-                    <option value=""{% if cookie_translation is none %} selected{% endif %}>
-                        {% trans lang=automatic_translation.name %}Automatic ({{ lang }}){% endtrans %}
-                    </option>
-                    {% for lang_code, t in available_translations|dictsort(by="key") %}
-                        <option value="{{ lang_code }}"{% if t == cookie_translation %} selected{% endif %}>
-                            {{ t.name }}
+            <div class="d-inline-flex gap-3 align-items-baseline">
+{% if participation is defined %}
+                <span class="navbar-text">
+                    {% trans first_name=user.first_name,
+                            last_name=user.last_name,
+                            username=user.username %}
+                        Logged in as <strong>{{ first_name }} {{ last_name }}</strong> <em>({{ username }})</em>
+                    {% endtrans %}
+                </span>
+                <form action="{{ contest_url("logout") }}" method="POST">
+                    {{ xsrf_form_html|safe }}
+                    <button type="submit" class="navbar-text btn btn-warning">{% trans %}Logout{% endtrans %}</button>
+                </form>
+{% endif %}
+{% if available_translations|length > 1 %}
+                <div class="navbar-text">
+                    <select id="lang" class="form-select btn btn-info w-auto pe-4" onchange="utils.switch_lang()">
+                        <option value=""{% if cookie_translation is none %} selected{% endif %}>
+                            {% trans lang=automatic_translation.name %}Automatic ({{ lang }}){% endtrans %}
                         </option>
-                    {% endfor %}
-                </select>
+                        {% for lang_code, t in available_translations|dictsort(by="key") %}
+                            <option value="{{ lang_code }}"{% if t == cookie_translation %} selected{% endif %}>
+                                {{ t.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+{% endif %}
             </div>
-            {% endif %}
-            {% if participation is defined %}
-            <form action="{{ contest_url("logout") }}" method="POST" class="d-flex">
-                {{ xsrf_form_html|safe }}
-                <button type="submit" class="btn btn-warning ml-2">{% trans %}Logout{% endtrans %}</button>
-            </form>
-            <div class="navbar-text ml-3">
-                {% trans first_name=user.first_name,
-                         last_name=user.last_name,
-                         username=user.username %}
-                    Logged in as <strong>{{ first_name }} {{ last_name }}</strong> <em>({{ username }})</em>
-                {% endtrans %}
-            </div>
-            {% endif %}
         </div>
     </div>
 
