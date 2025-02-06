@@ -89,18 +89,6 @@ var utils = new CMS.CWSUtils("{{ url() }}", "{{ contest_url() }}", "{{ contest.n
                         {% endfor %}
                     </ul>
                 </div>
-                <!--<div class="navbar-text">-->
-                <!--    <select id="lang" class="form-select btn btn-info w-auto pe-4" onchange="utils.switch_lang()">-->
-                <!--        <option value=""{% if cookie_translation is none %} selected{% endif %}>-->
-                <!--            {% trans lang=automatic_translation.name %}Automatic ({{ lang }}){% endtrans %}-->
-                <!--        </option>-->
-                <!--        {% for lang_code, t in available_translations|dictsort(by="key") %}-->
-                <!--            <option value="{{ lang_code }}"{% if t == cookie_translation %} selected{% endif %}>-->
-                <!--                {{ t.name }}-->
-                <!--            </option>-->
-                <!--        {% endfor %}-->
-                <!--    </select>-->
-                <!--</div>-->
 {% endif %}
             </div>
         </div>
