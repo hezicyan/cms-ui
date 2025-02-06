@@ -321,9 +321,9 @@ CMS.CWSUtils.prototype.rel_to_abs = function(sRelPath) {
     return sDir + sPath.substr(nStart);
 };
 
-CMS.CWSUtils.prototype.switch_lang = function() {
+CMS.CWSUtils.prototype.switch_lang = function(lang) {
     var cookie_path = this.rel_to_abs(this.contest_url() + "/").slice(0, -1) || "/";
-    var lang = $("#lang").val();
+    console.log(lang);
     if (lang === "") {
         document.cookie = "language="
             + "; expires=Thu, 01 Jan 1970 00:00:00 GMT"

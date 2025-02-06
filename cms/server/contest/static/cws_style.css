@@ -1010,9 +1010,25 @@ td.token_rules p:last-child {
     margin: 0 auto 12px;
 }
 
+.dropdown.hover .dropdown-menu {
+    display: block;
+    opacity: 0;
+    transition: all 0.4s ease;
+}
 
-#lang {
-    width: 100px;
+.dropdown.hover:hover .dropdown-menu {
+    display: block;
+    opacity: 1;
+}
+
+#lang_dropdown_list {
+    max-height: 0;
+    right: 0;
+    left: auto;
+}
+
+.dropdown.hover:hover #lang_dropdown_list {
+    max-height: 30em;
 }
 
 /** Printing interface */

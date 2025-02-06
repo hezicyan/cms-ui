@@ -50,7 +50,7 @@ var utils = new CMS.CWSUtils("{{ url() }}", "{{ contest_url() }}", "{{ contest.n
     <div id="navigation_bar" class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div class="container-fluid d-flex justify-content-between">
             <a class="navbar-brand" href="{{ contest_url() }}">{{ contest.description }}</a>
-            <div class="d-inline-flex gap-3 align-items-baseline">
+            <div class="d-inline-flex align-items-center gap-3 me-2">
 {% if participation is defined %}
                 <span class="navbar-text">
                     {% trans first_name=user.first_name,
@@ -65,18 +65,42 @@ var utils = new CMS.CWSUtils("{{ url() }}", "{{ contest_url() }}", "{{ contest.n
                 </form>
 {% endif %}
 {% if available_translations|length > 1 %}
-                <div class="navbar-text">
-                    <select id="lang" class="form-select btn btn-info w-auto pe-4" onchange="utils.switch_lang()">
-                        <option value=""{% if cookie_translation is none %} selected{% endif %}>
-                            {% trans lang=automatic_translation.name %}Automatic ({{ lang }}){% endtrans %}
-                        </option>
+                <div class="dropdown hover w-auto align-self-bottom">
+                    <i class="bi bi-translate h5"></i>
+                    <ul id="lang_dropdown_list" class="dropdown-menu overflow-y-auto w-auto">
+                        <li class="mx-1">
+                            <button
+                                class="dropdown-item rounded{% if cookie_translation is none %} active{% endif %}"
+                                onclick="utils.switch_lang('')"
+                            >
+                                {% trans lang=automatic_translation.name %}Automatic ({{ lang }}){% endtrans %}
+                            </button>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
                         {% for lang_code, t in available_translations|dictsort(by="key") %}
-                            <option value="{{ lang_code }}"{% if t == cookie_translation %} selected{% endif %}>
-                                {{ t.name }}
-                            </option>
+                            <li class="mx-1">
+                                <button
+                                    class="dropdown-item rounded{% if t == cookie_translation %} active{% endif %}"
+                                    onclick="utils.switch_lang('{{ lang_code }}')"
+                                >
+                                    {{ t.name }}
+                                </button>
+                            </li>
                         {% endfor %}
-                    </select>
+                    </ul>
                 </div>
+                <!--<div class="navbar-text">-->
+                <!--    <select id="lang" class="form-select btn btn-info w-auto pe-4" onchange="utils.switch_lang()">-->
+                <!--        <option value=""{% if cookie_translation is none %} selected{% endif %}>-->
+                <!--            {% trans lang=automatic_translation.name %}Automatic ({{ lang }}){% endtrans %}-->
+                <!--        </option>-->
+                <!--        {% for lang_code, t in available_translations|dictsort(by="key") %}-->
+                <!--            <option value="{{ lang_code }}"{% if t == cookie_translation %} selected{% endif %}>-->
+                <!--                {{ t.name }}-->
+                <!--            </option>-->
+                <!--        {% endfor %}-->
+                <!--    </select>-->
+                <!--</div>-->
 {% endif %}
             </div>
         </div>
