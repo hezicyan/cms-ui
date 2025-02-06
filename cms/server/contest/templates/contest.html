@@ -145,47 +145,43 @@ var utils = new CMS.CWSUtils("{{ url() }}", "{{ contest_url() }}", "{{ contest.n
         <div style="display: none" id="translation_time_left">{% trans %}Time left:{% endtrans %}</div>
         <!-- End -->
 
-        <div id="main" class="container">
-            <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container-fluid">
-                <div class="col-md-3">
-                    <h3 id="server_time_box">
-                        <span id="server_time_label">{% trans %}Server time:{% endtrans %}</span>
-                        <span id="server_time"></span>
-                    </h3>
-                    <h3 id="countdown_box">
-                        <span id="countdown_label"></span>
-                        <span id="countdown"></span>
-                    </h3>
-                    <div class="list-group">
-                        <a href="{{ contest_url() }}" class="list-group-item{% if page == 'overview' %} active{% endif %}">
-                            {% trans %}Overview{% endtrans %}
-                        </a>
-                        <a href="{{ contest_url('communication') }}" class="list-group-item{% if page == 'communication' %} active{% endif %}">
-                            {% trans %}Communication{% endtrans %}
-                            <span id="unread_count" class="badge bg-warning text-dark"></span>
-                        </a>
-                        {% if actual_phase == 0 or actual_phase == 3 or participation.unrestricted %}
-                            {% for t_iter in contest.tasks %}
-                                <div class="list-group-item">
-                                    <h5>{{ t_iter.name }}</h5>
-                                    <a href="{{ contest_url('tasks', t_iter.name, 'description') }}" class="list-group-item">
-                                        {% trans %}Statement{% endtrans %}
-                                    </a>
-                                    <a href="{{ contest_url('tasks', t_iter.name, 'submissions') }}" class="list-group-item">
-                                        {% trans %}Submissions{% endtrans %}
-                                    </a>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-                        <a href="{{ contest_url('documentation') }}" class="list-group-item{% if page == 'documentation' %} active{% endif %}">
-                            {% trans %}Documentation{% endtrans %}
-                        </a>
-                    </div>
+        <div id="main" class="container d-flex">
+            <nav class="bg-body-tertiary">
+                <h3 id="server_time_box">
+                    <span id="server_time_label">{% trans %}Server time:{% endtrans %}</span>
+                    <span id="server_time"></span>
+                </h3>
+                <h3 id="countdown_box">
+                    <span id="countdown_label"></span>
+                    <span id="countdown"></span>
+                </h3>
+                <div class="list-group">
+                    <a href="{{ contest_url() }}" class="list-group-item{% if page == 'overview' %} active{% endif %}">
+                        {% trans %}Overview{% endtrans %}
+                    </a>
+                    <a href="{{ contest_url('communication') }}" class="list-group-item{% if page == 'communication' %} active{% endif %}">
+                        {% trans %}Communication{% endtrans %}
+                        <span id="unread_count" class="badge bg-warning text-dark"></span>
+                    </a>
+                    {% if actual_phase == 0 or actual_phase == 3 or participation.unrestricted %}
+                        {% for t_iter in contest.tasks %}
+                            <div class="list-group-item">
+                                <h5>{{ t_iter.name }}</h5>
+                                <a href="{{ contest_url('tasks', t_iter.name, 'description') }}" class="list-group-item">
+                                    {% trans %}Statement{% endtrans %}
+                                </a>
+                                <a href="{{ contest_url('tasks', t_iter.name, 'submissions') }}" class="list-group-item">
+                                    {% trans %}Submissions{% endtrans %}
+                                </a>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <a href="{{ contest_url('documentation') }}" class="list-group-item{% if page == 'documentation' %} active{% endif %}">
+                        {% trans %}Documentation{% endtrans %}
+                    </a>
                 </div>
-                {% block core %}{% endblock core %}
-            </div>
             </nav>
+            {% block core %}{% endblock core %}
         </div>
     {% endif %}
 {% endblock body %}
