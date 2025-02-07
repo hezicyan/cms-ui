@@ -4,19 +4,6 @@ body {
     overflow-y: scroll;
 }
 
-/* Add some padding to the top of the page to avoid the static navbar from
-   covering the content on the top. Since (due to responsive CSS) the navbar
-   stops being static when the display is small enough, we have to add a
-   media-query rule
- */
-
-@media (min-width: 980px) {
-    #main {
-        position: relative;
-        padding-top: 20px;
-    }
-}
-
 /* Remove the on-hover coloring of rows in tables with table-nohover class */
 .table.table-nohover > tbody > tr:hover > td, .table.table-nohover > tbody > tr:hover > th {
     background-color: transparent !important;
@@ -169,12 +156,6 @@ div.login_container {
 div.login_box {
     max-width: 450px;
     margin: 0 auto;
-}
-
-@media (max-width: 979px) {
-    div.navbar.navbar-fixed-top {
-        margin-bottom: 20px;
-    }
 }
 
 @media (min-width: 768px) {
@@ -398,6 +379,8 @@ div.register_box {
 .sidebar {
     flex: 0 0 20%;
     max-width: 250px;
+    top: 5rem;
+    height: calc(100vh - 5rem);
 }
 
 /*** Unread count */
@@ -1007,6 +990,7 @@ td.token_rules p:last-child {
     max-height: 0;
     right: 0;
     left: auto;
+    transform: translateY(4px);
 }
 
 .dropdown.hover:hover #lang_dropdown_list {

@@ -47,8 +47,8 @@ var utils = new CMS.CWSUtils("{{ url() }}", "{{ contest_url() }}", "{{ contest.n
 {% endblock js %}
 
 {% block body %}
-    <div id="navigation_bar" class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <div class="container-fluid d-flex justify-content-between">
+    <header id="navigation_bar" class="navbar navbar-expand-lg sticky-top bg-light border-bottom">
+        <nav class="container-xxl d-flex justify-content-between">
             <a class="navbar-brand" href="{{ contest_url() }}">{{ contest.description }}</a>
             <div class="d-inline-flex align-items-center me-2">
 {% if participation is defined %}
@@ -67,7 +67,7 @@ var utils = new CMS.CWSUtils("{{ url() }}", "{{ contest_url() }}", "{{ contest.n
 {% if available_translations|length > 1 %}
                 <div class="dropdown hover w-auto align-self-bottom">
                     <button type="button" class="btn btn-light"><i class="bi bi-translate h5"></i></button>
-                    <ul id="lang_dropdown_list" class="dropdown-menu overflow-y-auto w-auto">
+                    <ul id="lang_dropdown_list" class="dropdown-menu overflow-y-auto w-auto shadow">
                         <li class="mx-1">
                             <button
                                 class="dropdown-item rounded{% if cookie_translation is none %} active{% endif %}"
@@ -91,8 +91,8 @@ var utils = new CMS.CWSUtils("{{ url() }}", "{{ contest_url() }}", "{{ contest.n
                 </div>
 {% endif %}
             </div>
-        </div>
-    </div>
+        </nav>
+    </header>
 
     {% if participation is undefined %}
         {% if handler.get_argument("login_error", "") != "" %}
@@ -145,8 +145,8 @@ var utils = new CMS.CWSUtils("{{ url() }}", "{{ contest_url() }}", "{{ contest.n
         <div style="display: none" id="translation_time_left">{% trans %}Time left:{% endtrans %}</div>
         <!-- End -->
 
-        <div id="main" class="container-fluid d-inline-flex gap-3">
-            <aside class="sidebar d-flex flex-column gap-3">
+        <div class="container-fluid d-inline-flex gap-3 mt-3">
+            <aside class="sidebar d-flex flex-column gap-3 sticky-top">
                 <div id="countdown_box" class="card">
                     <div class="card-body">
                         <div
@@ -163,7 +163,7 @@ var utils = new CMS.CWSUtils("{{ url() }}", "{{ contest_url() }}", "{{ contest.n
                         </div>
                     </div>
                 </div>
-                <div class="list-group">
+                <div class="list-group overflow-y-auto">
                     <a
                         href="{{ contest_url() }}"
                         class="list-group-item list-group-item-action{% if page == 'overview' %} active{% endif %}"
