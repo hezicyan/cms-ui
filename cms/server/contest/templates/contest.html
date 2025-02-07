@@ -50,9 +50,9 @@ var utils = new CMS.CWSUtils("{{ url() }}", "{{ contest_url() }}", "{{ contest.n
     <div id="navigation_bar" class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div class="container-fluid d-flex justify-content-between">
             <a class="navbar-brand" href="{{ contest_url() }}">{{ contest.description }}</a>
-            <div class="d-inline-flex align-items-center gap-3 me-2">
+            <div class="d-inline-flex align-items-center me-2">
 {% if participation is defined %}
-                <span class="navbar-text">
+                <span class="navbar-text me-2">
                     {% trans first_name=user.first_name,
                             last_name=user.last_name,
                             username=user.username %}
@@ -61,12 +61,12 @@ var utils = new CMS.CWSUtils("{{ url() }}", "{{ contest_url() }}", "{{ contest.n
                 </span>
                 <form action="{{ contest_url("logout") }}" method="POST">
                     {{ xsrf_form_html|safe }}
-                    <button type="submit" class="navbar-text btn btn-warning">{% trans %}Logout{% endtrans %}</button>
+                    <button type="submit" class="btn btn-light"><i class="bi bi-box-arrow-right h5"></i></button>
                 </form>
 {% endif %}
 {% if available_translations|length > 1 %}
                 <div class="dropdown hover w-auto align-self-bottom">
-                    <i class="bi bi-translate h5"></i>
+                    <button type="button" class="btn btn-light"><i class="bi bi-translate h5"></i></button>
                     <ul id="lang_dropdown_list" class="dropdown-menu overflow-y-auto w-auto">
                         <li class="mx-1">
                             <button
