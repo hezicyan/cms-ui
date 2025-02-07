@@ -394,11 +394,13 @@ div.register_box {
     margin-top: 5px;
 }
 
-/*** Unread count */
-
-#unread_count {
-    float: right;
+/*** Sidebar */
+.sidebar {
+    flex: 0 0 20%;
+    max-width: 250px;
 }
+
+/*** Unread count */
 
 #unread_count.no_unread {
     display: none;
@@ -760,30 +762,8 @@ td.token_rules p:last-child {
 
 /*** Countdown */
 
-#countdown_box {
-    text-align: center;
-    color: #333333;
-    margin: 0 0 8px;
-}
-
 #countdown_box.hidden {
     display: none;
-}
-
-#countdown_label {
-    color: #999999;
-}
-
-/*** Server time */
-
-#server_time_box {
-    text-align: center;
-    color: #333333;
-    margin: 0 0 8px;
-}
-
-#server_time_label {
-    color: #999999;
 }
 
 /*** License notice */
