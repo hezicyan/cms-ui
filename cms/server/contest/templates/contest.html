@@ -47,7 +47,7 @@ var utils = new CMS.CWSUtils("{{ url() }}", "{{ contest_url() }}", "{{ contest.n
 {% endblock js %}
 
 {% block body %}
-    <header id="navigation_bar" class="navbar navbar-expand-lg sticky-top bg-light border-bottom">
+    <header id="navigation_bar" class="navbar navbar-expand-lg sticky-top bg-light border-bottom shadow-sm">
         <nav class="container-xxl d-flex justify-content-between">
             <a class="navbar-brand" href="{{ contest_url() }}">{{ contest.description }}</a>
             <div class="d-inline-flex align-items-center me-2">
@@ -147,7 +147,7 @@ var utils = new CMS.CWSUtils("{{ url() }}", "{{ contest_url() }}", "{{ contest.n
 
         <div class="container-fluid d-inline-flex gap-3 mt-3">
             <aside class="sidebar d-flex flex-column gap-3 sticky-top">
-                <div id="countdown_box" class="card">
+                <div id="countdown_box" class="card shadow">
                     <div class="card-body">
                         <div
                             class="w-100 d-inline-flex justify-content-center align-items-baseline gap-1 text-body-secondary fs-4"
@@ -163,7 +163,7 @@ var utils = new CMS.CWSUtils("{{ url() }}", "{{ contest_url() }}", "{{ contest.n
                         </div>
                     </div>
                 </div>
-                <div class="list-group overflow-y-auto">
+                <div class="list-group overflow-y-auto shadow">
                     <a
                         href="{{ contest_url() }}"
                         class="list-group-item list-group-item-action{% if page == 'overview' %} active{% endif %}"
