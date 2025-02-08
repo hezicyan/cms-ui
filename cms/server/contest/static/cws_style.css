@@ -5,7 +5,8 @@ body {
 }
 
 /* Remove the on-hover coloring of rows in tables with table-nohover class */
-.table.table-nohover > tbody > tr:hover > td, .table.table-nohover > tbody > tr:hover > th {
+.table.table-nohover > tbody > tr:hover > td,
+.table.table-nohover > tbody > tr:hover > th {
     background-color: transparent !important;
 }
 
@@ -22,10 +23,10 @@ div.message_list div.message {
     border-radius: 4px;
     min-height: 18px;
     margin-bottom: 18px;
-    text-shadow: 0 1px 0 rgba(255,255,255,0.5);
-    color: #3A87AD;
-    border: 1px solid #BCD8F1;
-    background-color: #D9EDF7;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    color: #3a87ad;
+    border: 1px solid #bcd8f1;
+    background-color: #d9edf7;
 }
 
 div.question_list div.question {
@@ -41,7 +42,6 @@ div.question_list div.no_answer {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
-
 
 /* Display the timestamp on the top right corner of the box */
 
@@ -89,16 +89,6 @@ div.question_list div.no_answer {
     font-style: italic;
     margin: 0 0 18px;
     text-align: center;
-}
-
-/* Add some margins to the headers, except the ones after the page-header */
-
-h2 {
-    margin: 30px 0 15px;
-}
-
-div.page-header + h2 {
-    margin: 0 0 15px;
 }
 
 /* Enhancements to the question form */
@@ -254,7 +244,6 @@ div.register_box {
         margin-right: auto;
     }
 }
-
 
 /*** Task statement */
 
@@ -423,175 +412,90 @@ td.token_rules p:last-child {
 }
 
 .task_score {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 0;
+    flex: 1 1 0;
+    border-width: medium;
+    max-width: calc(20rem + 5vw);
 }
 
-.task_score .score img {
-    margin-left: 5px;
+.task_score .spinner-border {
+    scale: 75%;
 }
 
 .task_score.score_0 {
-    background-color: hsla(0, 100%, 50%, 0.4);
+    background-color: hsla(0, 100%, 50%, 0.2);
+    border-color: hsla(0, 100%, 50%, 0.5);
 }
 
 .task_score.score_0_100 {
-    background-color: hsla(60, 100%, 50%, 0.4);
+    background-color: hsla(60, 100%, 50%, 0.2);
+    border-color: hsla(60, 100%, 50%, 0.5);
 }
 
 .task_score.score_100 {
-    background-color: hsla(120, 100%, 50%, 0.4);
+    background-color: hsla(120, 100%, 50%, 0.2);
+    border-color: hsla(120, 100%, 50%, 0.5);
 }
 
 /*** Submit a solution */
 
-#submit_solution {
-    margin-bottom: 20px;
-}
-
-#submit_solution form {
-    margin-bottom: 0;
-}
-
-#submit_solution .control-group {
-    margin-bottom: 0;
-}
-
-#submit_solution .control-group:last-of-type {
-    margin-top: 10px;
-}
-
-#submit_solution .control-label {
-    width: 100px;
-    padding-top: 4px;
-    margin-bottom: 4px;
-}
-
-#submit_solution .controls {
-    margin-left: 110px;
-}
-
-#submit_solution input[type="file"] {
-    height: auto;
-    line-height: 18px;
-}
-
-
 /*** Submissions table */
 
-.submission_list colgroup col.time,
-.submission_list colgroup col.datetime {
-    width: 1%;
+.submission_list thead th,
+.submission_list td {
+    vertical-align: middle;
+    text-align: center;
 }
 
-.submission_list colgroup col.status {
-    width: 20%;
-}
-
-.submission_list colgroup col.public_score {
-    width: 20%;
-}
-
-.submission_list colgroup col.total_score {
-    width: 20%;
-}
-
-.submission_list colgroup col.files {
-    width: 10%;
-}
-
-.submission_list colgroup col.token {
-    width: 10%;
-}
-
-.submission_list tbody tr td.no_submissions {
-    font-style: italic;
-    text-align: center !important;
-}
-
-.submission_list tbody tr td.time,
-.submission_list tbody tr td.datetime {
-    white-space: nowrap;
-}
-
-.submission_list tbody tr td.status .details {
-    float: right;
-    cursor: pointer;
-}
-
-.submission_list tbody tr td.files,
-.submission_list tbody tr td.token {
-    padding: 3px;
-}
-
-.submission_list tbody tr td.files .btn,
-.submission_list tbody tr td.token .btn {
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    width: 100%;
-    white-space: nowrap;
-}
-
-.submission_list tbody tr td.token form {
-    display: inline;
-}
-
-.submission_list td.public_score.undefined {
-    color: #AAA;
+.submission_list .status .spinner-border {
+    scale: 70%;
 }
 
 .submission_list td.public_score.score_0 {
-    background-color: hsla(0, 100%, 50%, 0.4);
+    background-color: hsla(0, 100%, 50%, 0.2);
 }
 
 .submission_list tr:hover td.public_score.score_0 {
-    background-color: hsla(0, 100%, 50%, 0.5);
+    background-color: hsla(0, 100%, 50%, 0.3);
 }
 
 .submission_list td.public_score.score_0_100 {
-    background-color: hsla(60, 100%, 50%, 0.4);
+    background-color: hsla(60, 100%, 50%, 0.2);
 }
 
 .submission_list tr:hover td.public_score.score_0_100 {
-    background-color: hsla(60, 100%, 50%, 0.5);
+    background-color: hsla(60, 100%, 50%, 0.3);
 }
 
 .submission_list td.public_score.score_100 {
-    background-color: hsla(120, 100%, 50%, 0.4);
+    background-color: hsla(120, 100%, 50%, 0.2);
 }
 
 .submission_list tr:hover td.public_score.score_100 {
-    background-color: hsla(120, 100%, 50%, 0.5);
-}
-
-.submission_list td.total_score.undefined {
-    color: #AAA;
+    background-color: hsla(120, 100%, 50%, 0.3);
 }
 
 .submission_list td.total_score.score_0 {
-    background-color: hsla(0, 100%, 50%, 0.7);
+    background-color: hsla(0, 100%, 50%, 0.4);
 }
 
 .submission_list tr:hover td.total_score.score_0 {
-    background-color: hsla(0, 100%, 50%, 0.8);
+    background-color: hsla(0, 100%, 50%, 0.5);
 }
 
 .submission_list td.total_score.score_0_100 {
-    background-color: hsla(60, 100%, 50%, 0.7);
+    background-color: hsla(60, 100%, 50%, 0.4);
 }
 
 .submission_list tr:hover td.total_score.score_0_100 {
-    background-color: hsla(60, 100%, 50%, 0.8);
+    background-color: hsla(60, 100%, 50%, 0.5);
 }
 
 .submission_list td.total_score.score_100 {
-    background-color: hsla(120, 100%, 50%, 0.7);
+    background-color: hsla(120, 100%, 50%, 0.4);
 }
 
 .submission_list tr:hover td.total_score.score_100 {
-    background-color: hsla(120, 100%, 50%, 0.8);
+    background-color: hsla(120, 100%, 50%, 0.5);
 }
 
 /*** Submission details */
@@ -607,7 +511,10 @@ td.token_rules p:last-child {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%); /* Centers the loading spinner vertically and horizontally */
+    transform: translate(
+        -50%,
+        -50%
+    ); /* Centers the loading spinner vertically and horizontally */
     text-align: center;
     font-size: 16px;
     font-style: italic;
@@ -640,12 +547,12 @@ td.token_rules p:last-child {
     line-height: 20px;
     border: none;
     border-radius: 5px;
-    background-color: #E0E0E0;
+    background-color: #e0e0e0;
     cursor: pointer;
     height: 20px;
     padding: 4px;
     margin-bottom: 10px;
-    box-shadow: 0 0 2px 2px #D0D0D0 inset;
+    box-shadow: 0 0 2px 2px #d0d0d0 inset;
 }
 
 #submission_detail .subtask.open .subtask-head {
@@ -712,7 +619,12 @@ td.token_rules p:last-child {
     padding: 5px;
 }
 
-#submission_detail table.testcase-list tbody tr:not(.undefined) td.outcome .outcome {
+#submission_detail
+    table.testcase-list
+    tbody
+    tr:not(.undefined)
+    td.outcome
+    .outcome {
     display: inline-block;
     width: 100%;
     height: 24px;
@@ -732,10 +644,14 @@ td.token_rules p:last-child {
     background-color: #cc0000;
 }
 
-#submission_detail table.testcase-list tbody tr.partiallycorrect td.outcome .outcome {
+#submission_detail
+    table.testcase-list
+    tbody
+    tr.partiallycorrect
+    td.outcome
+    .outcome {
     background-color: #edd400;
 }
-
 
 /*** per-user time box */
 
@@ -796,7 +712,7 @@ td.token_rules p:last-child {
 }
 
 #attachments ul li a:hover {
-    background-color: #E3E3E3;
+    background-color: #e3e3e3;
 }
 
 #attachments ul li img {
@@ -833,7 +749,6 @@ td.token_rules p:last-child {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-
 
 /** Test interface */
 
@@ -931,7 +846,7 @@ td.token_rules p:last-child {
 
 .user_test_list tbody tr td.time.undefined,
 .user_test_list tbody tr td.memory.undefined {
-    color: #AAA;
+    color: #aaa;
     white-space: nowrap;
 }
 
