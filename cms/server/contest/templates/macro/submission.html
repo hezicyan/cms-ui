@@ -26,7 +26,7 @@ official (boolean): whether to display only the official (true) or unofficial
 {% set gettext = translation.gettext %}
 {% set score_type = get_score_type(dataset=task.active_dataset) %}
 {% set show_date = not submissions|map(attribute="timestamp")|all("today") %}
-<table class="table table-bordered table-hover mt-3 submission_list">
+<table class="table table-bordered table-hover mt-3 text-center align-middle submission_list">
 {% set num_cols = 2 %}
     <colgroup>
 {% if show_date %}

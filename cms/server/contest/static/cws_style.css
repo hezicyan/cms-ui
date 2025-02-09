@@ -440,12 +440,6 @@ td.token_rules p:last-child {
 
 /*** Submissions table */
 
-.submission_list thead th,
-.submission_list td {
-    vertical-align: middle;
-    text-align: center;
-}
-
 .submission_list .status .spinner-border {
     scale: 70%;
 }
