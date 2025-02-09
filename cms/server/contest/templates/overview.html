@@ -140,14 +140,14 @@
                 {% if t_iter.active_dataset.time_limit is not none %}
                   {{ t_iter.active_dataset.time_limit|format_duration(length="long") }}
                 {% else %}
-                  <span class="text-muted">{% trans %}N/A{% endtrans %}</span>
+                  <span class="text-body-secondary">{% trans %}N/A{% endtrans %}</span>
                 {% endif %}
               </td>
               <td>
                 {% if t_iter.active_dataset.memory_limit is not none %}
                   {{ t_iter.active_dataset.memory_limit|format_size }}
                 {% else %}
-                  <span class="text-muted">{% trans %}N/A{% endtrans %}</span>
+                  <span class="text-body-secondary">{% trans %}N/A{% endtrans %}</span>
                 {% endif %}
               </td>
               <td><span class="badge bg-primary">{{ get_task_type(dataset=t_iter.active_dataset).name }}</span></td>
@@ -179,7 +179,7 @@
     <i class="bi bi-infinity me-2"></i>
     {% trans %}Unlimited tokens available{% endtrans %}
   </p>
-  <p class="small text-muted mb-0">
+  <p class="small text-body-secondary mb-0">
     {% trans %}Score calculation: Maximum between token-used submissions and last submission{% endtrans %}
   </p>
 {% elif tokens_contest == TOKEN_MODE_INFINITE %}

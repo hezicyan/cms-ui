@@ -186,7 +186,7 @@
                         {% endif %}
                         <div>
                             <div class="name">{{ filename }}</div>
-                            <div class="size text-muted">{{ file_size|format_size }}</div>
+                            <div class="size text-body-secondary">{{ file_size|format_size }}</div>
                             {% if type_name is not none %}
                                 <div class="type">{{ translation.translate_mimetype(type_name) }}</div>
                             {% endif %}

@@ -10,7 +10,7 @@
             <h3>{% trans %}Choose a contest{% endtrans %}</h3>
             <ul class="list-group">
                 {% for c_name, c_iter in contest_list|dictsort(by="key") %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center {% if c_iter.stop < now %}text-muted{% endif %}">
+                    <li class="list-group-item d-flex justify-content-between align-items-center {% if c_iter.stop < now %}text-body-secondary{% endif %}">
                         <a {% if c_iter.stop < now %} style="color: #6c757d" {% endif %} href="{{ url(c_iter.name) }}">{{ c_iter.description }}</a>
                     </li>
                 {% endfor %}
