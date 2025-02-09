@@ -1,4 +1,4 @@
-{% extends "contest.html" %}
+ {% extends "contest.html" %}
 
 {% set page = "task_description" %}
 
@@ -8,13 +8,22 @@
 <div class="col-12 task_description">
 
 
-<div>
-    <h1>{% trans name=task.title, short_name=task.name %}{{ name }} ({{ short_name }}) {% endtrans %}</h1>
-    <small>description</small>
+<div class="container py-5">
+      <h1 class="display-4 fw-bold text-primary mb-3 text-center" id="task-title">{% trans name=task.title, short_name=task.name %}{{ name }} ({{ short_name }}) {% endtrans %}</h1>
+      <hr id="dynamic-hr" class="w-225 mx-auto mt-3 border-primary opacity-75">
 </div>
 
+<script>
+    window.onload = function() {
+      var name = document.getElementById('task-title').innerText;
+      var totalLength = name.length;
+      var hrWidth = totalLength * 25; 
+      document.getElementById('dynamic-hr').style.width = hrWidth + 'px';
+    };
+  </script>
 
-<h2>{% trans %}Statement{% endtrans %}</h2>
+<div class="mb-4">
+<h2 class="h3 mb-4 text-secondary">{% trans %}Statement{% endtrans %}</h2>
 
 {% if task.statements|length == 0 %}
 <div class="row statement no_statements">
@@ -83,30 +92,31 @@
     </div>
 </div>
 {% endif %}
+</div>
 
+<h2 class="h3 mb-4 text-secondary">{% trans %}Some details{% endtrans %}</h2>
 
-<h2>{% trans %}Some details{% endtrans %}</h2>
-
+<div class="card shadow border-0 mb-4" style="max-width: 100%; overflow-x: hidden; padding: 5px;">
 <table class="table table-bordered table-hover" style="table-layout: fixed">
-    <colgroup>
-        <col style="width: 20%"/>
-        <col style="width: 20%"/>
-        <col style="width: 60%"/>
+    <colgroup class="mx-auto">
+        <col style="width: 15%"/>
+        <col style="width: 15%"/>
+        <col style="width: 55%"/>
     </colgroup>
     <tbody>
         <tr>
-            <th>{% trans %}Type{% endtrans %}</th>
+            <th style="background-color: #d1e7dd;">{% trans %}Type{% endtrans %}</th>
             <td colspan="2">{% set task_type = get_task_type(dataset=task.active_dataset) %}{{ task_type.name }}</td>
         </tr>
 {% if task.active_dataset.time_limit is not none %}
         <tr>
-            <th>{% trans %}Time limit{% endtrans %}</th>
+            <th style="background-color:#d1e7dd;">{% trans %}Time limit{% endtrans %}</th>
             <td colspan="2">{{ task.active_dataset.time_limit|format_duration(length="long") }}</td>
         </tr>
 {% endif %}
 {% if task.active_dataset.memory_limit is not none %}
         <tr>
-            <th>{% trans %}Memory limit{% endtrans %}</th>
+            <th style="background-color:#d1e7dd;">{% trans %}Memory limit{% endtrans %}</th>
             <td colspan="2">{{ task.active_dataset.memory_limit|format_size }}</td>
         </tr>
 {% endif %}
@@ -114,7 +124,7 @@
 {% if compilation_commands is not none %}
 {% set compilation_commands = compilation_commands|dictselect("in", contest.languages, by="key") %}
 <tr>
-    <th rowspan="{{ compilation_commands|length }}">{% trans %}Compilation commands{% endtrans %}</th>
+    <th rowspan="{{ compilation_commands|length }}"  style="background-color: #d1e7dd;">{% trans %}Compilation commands{% endtrans %}</th>
     {% for l, c in compilation_commands|dictsort(by="key") %}
         {% if not loop.first %}
 </tr>
@@ -132,7 +142,7 @@
 
 {% if tokens_contest != TOKEN_MODE_DISABLED and tokens_tasks != TOKEN_MODE_DISABLED %}
 <tr>
-    <th>{% trans %}Tokens{% endtrans %}</th>
+    <th  style="background-color:#d1e7dd;">{% trans %}Tokens{% endtrans %}</th>
     <td colspan="2" class="token_rules">
     {% if tokens_contest == TOKEN_MODE_INFINITE and tokens_tasks == TOKEN_MODE_INFINITE %}
         <p>
@@ -161,12 +171,13 @@
 {% endif %}
     </tbody>
 </table>
+</div> 
 
 
 {% if task.attachments|length > 0 %}
-    <h2>{% trans %}Attachments{% endtrans %}</h2>
+    <h2 class="h3 mb-4 text-secondary">{% trans %}Attachments{% endtrans %}</h2>
     <div id="attachments">
-        <ul class="list-unstyled">
+        <ul class="list-unstyled text-center">
             {% for filename, attachment in task.attachments|dictsort(by="key") %}
                 {% set mime_type = get_mimetype_for_file_name(filename) %}
                 {% if mime_type is not none %}
@@ -177,19 +188,15 @@
                     {% set type_icon = none %}
                 {% endif %}
                 {% set file_size = handler.application.service.file_cacher.get_size(attachment.digest) %}
-                <li class="d-flex align-items-center mb-3">
-                    <a href="{{ contest_url('tasks', task.name, 'attachments', filename) }}" class="btn btn-outline-primary d-flex align-items-center">
+                <li class="d-flex align-items-center mb-3 custom-link shadow">
+                    <a href="{{ contest_url('tasks', task.name, 'attachments', filename) }}" class="d-flex align-items-center">
                         {% if type_icon is not none %}
                             <img src="{{ url('static', 'img', 'mimetypes', '%s.png'|format(type_icon)) }}" alt="{{ mime_type }}" class="me-2" />
                         {% else %}
                             <img src="{{ url('static', 'img', 'mimetypes', 'unknown.png') }}" alt="{% trans %}unknown{% endtrans %}" class="me-2" />
                         {% endif %}
-                        <div>
-                            <div class="name">{{ filename }}</div>
-                            <div class="size text-body-secondary">{{ file_size|format_size }}</div>
-                            {% if type_name is not none %}
-                                <div class="type">{{ translation.translate_mimetype(type_name) }}</div>
-                            {% endif %}
+                        <div class="d-flex flex-column">
+                            <div class="md-0">{{ filename }}    {{ file_size|format_size }}</div>
                         </div>
                     </a>
                 </li>
