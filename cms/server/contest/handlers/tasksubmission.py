@@ -318,7 +318,9 @@ class SubmissionDetailsHandler(ContestHandler):
                 feedback_level = task.feedback_level
 
             details = score_type.get_html_details(
-                raw_details, feedback_level, translation=self.translation)
+                raw_details, feedback_level, translation=self.translation,
+                use_bootstrap5=True,
+            )
 
         self.render("submission_details.html", sr=sr, details=details,
                     **self.r_params)

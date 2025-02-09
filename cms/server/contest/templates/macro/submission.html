@@ -147,26 +147,22 @@ submissions_download_allowed (bool): whether to allow users to download
     <td class="time font-monospace">{{ s.timestamp|format_time }}</td>
 {% endif %}
     <td class="status">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center gap-3">
 {% if status == SubmissionResult.COMPILING %}
             {% trans %}Compiling...{% endtrans %}
-            <div class="spinner-border text-dark-emphasis" role="status"></div>
+            {# macro_common.spinner() #}
 {% elif status == SubmissionResult.COMPILATION_FAILED %}
             {% trans %}Compilation failed{% endtrans %}
-            <a class="details link-primary link-offset-1 link-underline-opacity-25 link-underline-opacity-100-hover">
-                {% trans %}details{% endtrans %}
-            </a>
+            {% include "submission_detail_button.html" %}
 {% elif status == SubmissionResult.EVALUATING %}
             {% trans %}Evaluating...{% endtrans %}
-            <div class="spinner-border text-dark-emphasis" role="status"></div>
+            {# macro_common.spinner() #}
 {% elif status == SubmissionResult.SCORING %}
             {% trans %}Scoring...{% endtrans %}
-            <div class="spinner-border text-dark-emphasis" role="status"></div>
+            {# macro_common.spinner() #}
 {% elif status == SubmissionResult.SCORED %}
             {% trans %}Evaluated{% endtrans %}
-            <a class="details link-primary link-offset-1 link-underline-opacity-25 link-underline-opacity-100-hover">
-                {% trans %}details{% endtrans %}
-            </a>
+            {% include "submission_detail_button.html" %}
 {% endif %}
         </div>
     </td>

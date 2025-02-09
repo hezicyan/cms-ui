@@ -1,4 +1,5 @@
 {% import 'macro/submission.html' as macro_submission %}
+{# import 'macro/common.html' as macro_common #}
 
 {% extends "contest.html" %}
 
@@ -25,29 +26,20 @@
 
 {% block additional_js %}
 
-$(document).on("click", ".submission_list tbody tr td.status > div .details", function (event) {
-    var submission_id = $(this).parent().parent().attr("data-submission");
-    var modal = $("#submission_detail");
-    var modal_body = modal.children(".modal-body");
-    modal_body.html('<div class="loading"><img src="{{ url("static", "loading.gif") }}"/>{% trans %}loading...{% endtrans %}</div>');
-    modal_body.load(utils.contest_url("tasks", "{{ task.name }}", "submissions", submission_id, "details"), function() {
-        $(".score_details .subtask .subtask-head").each(function () {
-            $(this).prepend("<i class=\"icon-chevron-right\"></i>");
-        });
-        $(".score_details .subtask .subtask-head").click(function () {
-            $(this).parent().toggleClass("open");
-            if ($(this).parent().hasClass("open")) {
-                $(this).children("i").removeClass("icon-chevron-right").addClass("icon-chevron-down");
-            } else {
-                $(this).children("i").removeClass("icon-chevron-down").addClass("icon-chevron-right");
-            }
-        });
-        $(".score_details table.testcase-list").addClass("table table-bordered table-striped");
-        $(".score_details table.testcase-list tbody tr:not(.undefined) td.outcome").each(function () {
-            $(this).html("<span class=\"outcome\">" + $(this).text() + "</span>");
-        });
+document.addEventListener("DOMContentLoaded", () => {
+    const submissionDetailModal = document.getElementById("submission_detail");
+    submissionDetailModal.addEventListener("show.bs.modal", async (event) => {
+        const button = event.relatedTarget;
+        console.log(button);
+        const submissionId = button.closest("[data-submission]").getAttribute("data-submission");
+        const modalBody = submissionDetailModal.querySelector(".modal-body");
+        console.log(modalBody);
+        modalBody.innerHTML = `{% include "spinner.html" %}`;
+        const response = await fetch(
+            utils.contest_url("tasks", "{{ task.name }}", "submissions", submissionId, "details"),
+        );
+        modalBody.innerHTML = await response.text();
     });
-    modal.modal("show");
 });
 
 function is_status_terminal (status) {
@@ -94,8 +86,7 @@ update_score = function(score_elem, task_score_elem,
     var task_score_span = task_score_elem.find(".score");
     task_score_span.text(task_score_message);
     if (task_score_is_partial) {
-        task_score_span.after(
-            $("<div class=\"spinner-border text-dark-emphasis\" role=\"status\"></div>"));
+        task_score_span.after(`{% include "spinner.html" %}`);
     } else {
         task_score_span.next().remove();
     }
@@ -113,14 +104,9 @@ update_scores = function (submission_id, data) {
     row.find("td.status > div").text(data["status_text"]);
     var terminal_status = is_status_terminal(data["status"]);
     if (!terminal_status) {
-        row.find("td.status > div").append(
-            $("<div class=\"spinner-border text-dark-emphasis\" role=\"status\"></div>"));
+        row.find("td.status > div").append(`{% include "spinner.html" %}`);
     } else {
-        row.find("td.status > div").append($(`
-            <a class="details link-primary link-offset-1 link-underline-opacity-25 link-underline-opacity-100-hover" >
-                {% trans %}details{% endtrans %}
-            </a>
-        `));
+        row.find("td.status > div").append($(`{% include "submission_detail_button.html" %}`));
     }
     if (terminal_status) {
         update_score(
@@ -210,7 +196,7 @@ $(document).ready(function () {
                     {{ score_type.format_score(public_score, score_type.max_public_score, none, task.score_precision, translation=translation) }}
                 </span>
         {% if is_score_partial %}
-                <div class="spinner-border text-dark-emphasis" role="status"></div>
+                {% include "spinner.html" %}
         {% endif %}
             </div>
         </div>
@@ -240,7 +226,7 @@ $(document).ready(function () {
         {% endif %}
                 </span>
         {% if can_use_tokens and is_score_partial %}
-                <div class="spinner-border text-dark-emphasis" role="status"></div>
+                {% include "spinner.html" %}
         {% endif %}
             </div>
         </div>
@@ -440,15 +426,19 @@ $(document).ready(function () {
 {# END: previous submissions #}
 
 {# BEGIN: submission detail #}
-<div class="modal fade hide wide" id="submission_detail">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&#xD7;</button>
-        <h3>{% trans %}Submission details{% endtrans %}</h3>
-    </div>
-    <div class="modal-body">
-    </div>
-    <div class="modal-footer">
-        <a href="#" class="btn" data-dismiss="modal">{% trans %}Close{% endtrans %}</a>
+<div class="modal fade" id="submission_detail">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">{% trans %}Submission details{% endtrans %}</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body d-flex justify-content-center">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
 </div>
 {# END: submission detail #}
