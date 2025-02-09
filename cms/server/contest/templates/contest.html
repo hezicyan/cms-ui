@@ -107,7 +107,7 @@ var utils = new CMS.CWSUtils("{{ url() }}", "{{ contest_url() }}", "{{ contest.n
             </div>
         </div>
         {% endif %}
-        <div class="container card rounded-5 shadow login_box">
+        <div class="container card rounded-5 shadow login_box py-2">
             <div class="card-body px-5 py-4">
                 <h2 class="card-title">{% trans %}Welcome{% endtrans %}</h2>
                 <h5 class="card-subtitle text-body-secondary mb-4">{% trans %}Please log in{% endtrans %}</h5>
@@ -131,7 +131,7 @@ var utils = new CMS.CWSUtils("{{ url() }}", "{{ contest_url() }}", "{{ contest.n
                         </button>
                     </div>
                 </form>
-                {% if contest.allow_registration or True %}
+                {% if contest.allow_registration %}
                 <div class="mt-4 row align-items-center">
                     <span class="col-7 offset-1">{% trans %}Don't have an account?{% endtrans %}</span>
                     <a
