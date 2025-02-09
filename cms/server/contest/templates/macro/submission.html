@@ -222,7 +222,7 @@ submissions_download_allowed (bool): whether to allow users to download
                         {% set filename = temp_filename %}
                     {% endif %}
                 {% endif %}
-                <li>
+                <li class="mx-1">
                     <a
                         class="dropdown-item rounded"
                         href="{{ contest_url("tasks", task.name, "submissions", s_num, "files", filename) }}"
