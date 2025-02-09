@@ -347,7 +347,7 @@ class ScoreTypeGroup(ScoreTypeAlone):
                     {{ score|round(2)|format_decimal }}
                     / {{ st["max_score"]|format_decimal }}
     {% else %}
-                    ({% trans %}N/A{% endtrans %})
+                    {% trans %}N/A{% endtrans %}
     {% endif %}
                 </div>
                 <span class="title">
