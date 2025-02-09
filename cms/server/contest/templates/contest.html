@@ -47,6 +47,8 @@ var utils = new CMS.CWSUtils("{{ url() }}", "{{ contest_url() }}", "{{ contest.n
 {% endblock js %}
 
 {% block body %}
+<div class="container-fluid d-flex flex-column min-vh-100 p-0">
+
     <header id="navigation_bar" class="navbar navbar-expand-lg sticky-top bg-light border-bottom shadow-sm">
         <nav class="container-xxl d-flex justify-content-between">
             <a class="navbar-brand" href="{{ contest_url() }}">{{ contest.description }}</a>
@@ -94,8 +96,10 @@ var utils = new CMS.CWSUtils("{{ url() }}", "{{ contest_url() }}", "{{ contest.n
         </nav>
     </header>
 
+    <div class="flex-grow-1 container-fluid d-flex justify-content-center align-items-center">
     {% if participation is undefined %}
         {% if handler.get_argument("login_error", "") != "" %}
+        {# FIXME: use toast #}
         <div id="notifications" class="notifications">
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -103,31 +107,40 @@ var utils = new CMS.CWSUtils("{{ url() }}", "{{ contest_url() }}", "{{ contest.n
             </div>
         </div>
         {% endif %}
-        <div class="login_container">
-            <div class="login_box p-5">
-                <h1>{% trans %}Welcome{% endtrans %}</h1>
-                <p>{% trans %}Please log in{% endtrans %}</p>
-                <form class="form" action="{{ contest_url("login") }}" method="POST">
+        <div class="container card rounded-5 shadow login_box">
+            <div class="card-body px-5 py-4">
+                <h2 class="card-title">{% trans %}Welcome{% endtrans %}</h2>
+                <h5 class="card-subtitle text-body-secondary mb-4">{% trans %}Please log in{% endtrans %}</h5>
+                <form class="d-flex flex-column gap-3" action="{{ contest_url("login") }}" method="POST">
                     {{ xsrf_form_html|safe }}
                     {% set next_page = handler.get_argument("next", none) %}
                     {% if next_page is not none %}
                     <input type="hidden" name="next" value="{{ next_page }}">
                     {% endif %}
-                    <div class="mb-3">
-                        <label for="username" class="form-label">{% trans %}Username{% endtrans %}</label>
-                        <input type="text" class="form-control" name="username" id="username">
+                    <div class="form-floating">
+                        <input type="text" class="form-control rounded-4" name="username" id="username" placeholder="">
+                        <label for="username">{% trans %}Username{% endtrans %}</label>
                     </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">{% trans %}Password{% endtrans %}</label>
-                        <input type="password" class="form-control" name="password" id="password">
+                    <div class="form-floating">
+                        <input type="password" class="form-control rounded-4" name="password" id="password" placeholder="">
+                        <label for="password">{% trans %}Password{% endtrans %}</label>
                     </div>
-                    <button type="submit" class="btn btn-primary">{% trans %}Login{% endtrans %}</button>
-                    <button type="reset" class="btn btn-secondary">{% trans %}Reset{% endtrans %}</button>
+                    <div class="row">
+                        <button type="submit" class="btn btn-primary rounded-pill col-6 offset-3">
+                            {% trans %}Login{% endtrans %}
+                        </button>
+                    </div>
                 </form>
-                {% if contest.allow_registration %}
-                <p class="mt-3">
-                    {% trans %}Don't have an account?{% endtrans %} <a href="{{ contest_url('register') }}">{% trans %}Register{% endtrans %}</a>
-                </p>
+                {% if contest.allow_registration or True %}
+                <div class="mt-4 row align-items-center">
+                    <span class="col-7 offset-1">{% trans %}Don't have an account?{% endtrans %}</span>
+                    <a
+                        class="btn btn-outline-secondary col-3 rounded-pill"
+                        href="{{ contest_url('register') }}"
+                    >
+                        {% trans %}Register{% endtrans %}
+                    </a>
+                </div>
                 {% endif %}
             </div>
         </div>
@@ -235,4 +248,7 @@ var utils = new CMS.CWSUtils("{{ url() }}", "{{ contest_url() }}", "{{ contest.n
             </main>
         </div>
     {% endif %}
+    </div>
+
+</div>
 {% endblock body %}
