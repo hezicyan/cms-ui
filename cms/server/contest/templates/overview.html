@@ -47,6 +47,41 @@
                   The contest started at <strong>{{ start_time }}</strong> and ended at <strong>{{ stop_time }}</strong>.
                 {% endtrans %}
               </p>
+              {% if contest.analysis_enabled %}
+                <div class="mt-3">
+                  {% if phase == +1 %}
+                    <div class="alert alert-info">
+                      <p class="mb-0">{% trans %}The analysis mode hasn't started yet.{% endtrans %}</p>
+                    </div>
+                    <p class="small text-body-secondary">
+                      {% trans start_time=contest.analysis_start|format_datetime_smart,
+                              stop_time=contest.analysis_stop|format_datetime_smart %}
+                        Analysis mode will start at <strong>{{ start_time }}</strong> and end at <strong>{{ stop_time }}</strong>.
+                      {% endtrans %}
+                    </p>
+                  {% elif phase == +2 %}
+                    <div class="alert alert-success">
+                      <p class="mb-0">{% trans %}The analysis mode is currently running.{% endtrans %}</p>
+                    </div>
+                    <p class="small text-body-secondary">
+                      {% trans start_time=contest.analysis_start|format_datetime_smart,
+                              stop_time=contest.analysis_stop|format_datetime_smart %}
+                        Analysis mode started at <strong>{{ start_time }}</strong> and will end at <strong>{{ stop_time }}</strong>.
+                      {% endtrans %}
+                    </p>
+                  {% elif phase == +3 %}
+                    <div class="alert alert-secondary">
+                      <p class="mb-0">{% trans %}The analysis mode has already ended.{% endtrans %}</p>
+                    </div>
+                    <p class="small text-body-secondary">
+                      {% trans start_time=contest.analysis_start|format_datetime_smart,
+                              stop_time=contest.analysis_stop|format_datetime_smart %}
+                        Analysis mode ran from <strong>{{ start_time }}</strong> to <strong>{{ stop_time }}</strong>.
+                      {% endtrans %}
+                    </p>
+                  {% endif %}
+                </div>
+              {% endif %}
             {% endif %}
 
             {% if tokens_contest != TOKEN_MODE_DISABLED and tokens_tasks != TOKEN_MODE_DISABLED %}
@@ -59,14 +94,14 @@
               {% if contest.max_submission_number is not none %}
                 <p class="mb-2">
                   <i class="bi bi-file-earmark-arrow-up me-2"></i>
-                  {% trans submissions=contest.max_submission_number %}Maximum submissions: <strong>{{ submissions }}</strong>{% endtrans %}
+                  {% trans submissions=contest.max_submission_number %}You can submit at most {{ submissions }} solutions during this contest.{% endtrans %}
                 </p>
               {% endif %}
 
               {% if contest.max_user_test_number is not none %}
                 <p class="mb-0">
                   <i class="bi bi-gear me-2"></i>
-                  {% trans user_tests=contest.max_user_test_number %}Maximum user tests: <strong>{{ user_tests }}</strong>{% endtrans %}
+                  {% trans user_tests=contest.max_user_test_number %}You can submit at most {{ user_tests }} user tests during this contest.{% endtrans %}
                 </p>
               {% endif %}
             </div>
@@ -85,7 +120,7 @@
 
               <p class="small">
                 {% trans per_user_time=contest.per_user_time|format_timedelta %}
-                  Available time: <strong>{{ per_user_time }}</strong>
+                  Every user is allowed to compete (i.e. submit solutions) for a uninterrupted time frame of <strong>{{ per_user_time }}</strong>.
                 {% endtrans %}
               </p>
 
@@ -111,7 +146,7 @@
 
 {% if actual_phase == 0 or actual_phase == 3 %}
 <section>
-  <h2 class="h3 mb-4 text-secondary">{% trans %}Task Overview{% endtrans %}</h2>
+  <h2 class="h3 mb-4 text-secondary">{% trans %}Task overview{% endtrans %}</h2>
 
   <div class="card shadow border-0" style="max-width: 100%; overflow-x: hidden;">
     <div class="card-body p-0">
@@ -177,51 +212,83 @@
 {% if tokens_contest == TOKEN_MODE_INFINITE and tokens_tasks == TOKEN_MODE_INFINITE %}
   <p class="mb-2">
     <i class="bi bi-infinity me-2"></i>
-    {% trans %}Unlimited tokens available{% endtrans %}
+    {% trans %}You have an infinite number of tokens.{% endtrans %}
   </p>
   <p class="small text-body-secondary mb-0">
-    {% trans %}Score calculation: Maximum between token-used submissions and last submission{% endtrans %}
+    {% trans %}You can see the detailed result of a submission by using a token on it.{% endtrans %}
+    {%+ trans %}Your score for each task will be the maximum among the tokened submissions and the last one.{% endtrans %}
   </p>
 {% elif tokens_contest == TOKEN_MODE_INFINITE %}
   <p class="mb-2">
     <i class="bi bi-asterisk me-2"></i>
-    {% trans %}Task-specific token rules{% endtrans %}
+    {% trans %}You have a distinct set of tokens for each task.{% endtrans %}
+    {%+ trans type_pl=_("tokens") %}You can find the rules for the {{ type_pl }} on each task's description page.{% endtrans %}
+  </p>
+  <p class="small text-body-secondary mb-0">
+    {% trans %}You can see the detailed result of a submission by using a token on it.{% endtrans %}
+    {%+ trans %}Your score for each task will be the maximum among the tokened submissions and the last one.{% endtrans %}
   </p>
 {% elif tokens_tasks == TOKEN_MODE_INFINITE %}
   <p class="mb-2">
     <i class="bi bi-share me-2"></i>
-    {% trans %}Shared contest tokens{% endtrans %}
+    {% trans %}You have a set of tokens shared among all tasks.{% endtrans %}
+    {{ contest|extract_token_params|format_token_rules }}
+  </p>
+  <p class="small text-body-secondary mb-0">
+    {% trans %}You can see the detailed result of a submission by using a token on it.{% endtrans %}
+    {%+ trans %}Your score for each task will be the maximum among the tokened submissions and the last one.{% endtrans %}
   </p>
 {% else %}
   <p class="mb-2">
     <i class="bi bi-layers me-2"></i>
-    {% trans %}Dual token system (contest + task){% endtrans %}
+    {% trans %}You have two types of tokens: a set of <em>contest-tokens</em> shared among all tasks and a distinct set of <em>task-tokens</em> for each task.{% endtrans %}  </p>
+    {{ contest|extract_token_params|format_token_rules(t_type="contest") }}
+    {% trans type_pl=_("task-tokens") %}You can find the rules for the {{ type_pl }} on each task's description page.{% endtrans %}
+    <p class="small text-body-secondary mb-0">
+    {% trans %}You can see the detailed result of a submission by using two tokens on it, one of each type.{% endtrans %}    {%+ trans %}Your score for each task will be the maximum among the tokened submissions and the last one.{% endtrans %}
+    {%+ trans %}Your score for each task will be the maximum among the tokened submissions and the last one.{% endtrans %}
   </p>
+
 {% endif %}
 {% endmacro %}
 
 {% macro _build_time_frame_alert(actual_phase) %}
 <div class="alert alert-{{ 'info' if actual_phase < 0 else 'secondary' }} mt-3">
   {% if actual_phase == -2 %}
-    <p class="small mb-0">{% trans %}Time frame selection available at contest start{% endtrans %}</p>
+    <p class="small mb-0">
+      {% trans %}As soon as the contest starts you can choose to start your time frame.{% endtrans %}
+      {%+ trans %}Once you start, you can submit solutions until the end of the time frame or until the end of the contest, whatever comes first.{% endtrans %}
+    </p>
   {% elif actual_phase == -1 %}
-    <p class="small mb-0">{% trans %}Click the button below to begin your time frame{% endtrans %}</p>
+    <p class="small mb-0">
+      {% trans %}By clicking on the button below you can start your time frame.{% endtrans %}
+      {%+ trans %}Once you start, you can submit solutions until the end of the time frame or until the end of the contest, whatever comes first.{% endtrans %}
+    </p>
   {% elif actual_phase == 0 %}
     <p class="small mb-0">
-      {% trans start_time=participation.starting_time|format_datetime_smart %}
-        Started at: <strong>{{ start_time }}</strong>
-      {% endtrans %}
+      {% trans start_time=participation.starting_time|format_datetime_smart %}You started your time frame at <strong>{{ start_time }}</strong>.{% endtrans %}
+      {%+ trans %}You can submit solutions until the end of the time frame or until the end of the contest, whatever comes first.{% endtrans %}
     </p>
-  {% elif actual_phase >= +1 %}
-    {% if participation.starting_time is none %}
-      <p class="small mb-0 text-danger">{% trans %}No time frame started{% endtrans %}</p>
-    {% else %}
-      <p class="small mb-0">
-        {% trans start_time=participation.starting_time|format_datetime_smart %}
-          Completed at: <strong>{{ start_time }}</strong>
-        {% endtrans %}
-      </p>
-    {% endif %}
+  {% elif actual_phase == +1 %}
+    <p class="small mb-0">
+      {% trans start_time=participation.starting_time|format_datetime_smart %}You started your time frame at <strong>{{ start_time }}</strong> and you already finished it.{% endtrans %}
+      {%+ trans %}There's nothing you can do now.{% endtrans %}
+    </p>
+  {% elif actual_phase >= +2 %}
+      {% if participation.starting_time is none %}
+        <p class="small mb-0 text-danger">
+          {% trans %}You never started your time frame. Now it's too late.{% endtrans %}
+        </p>
+      {% else %}
+        <p class="small mb-0">
+          {% trans start_time=participation.starting_time|format_datetime_smart %}You started your time frame at <strong>{{ start_time }}</strong> and you already finished it.{% endtrans %}
+        </p>
+      {% endif %}
+      {% if actual_phase != +3 %}
+        <p class="small mb-0 text-danger">
+          {% trans %}You never started your time frame. Now it's too late.{% endtrans %}
+        </p>
+      {% endif %}
   {% endif %}
 </div>
 {% endmacro %}
