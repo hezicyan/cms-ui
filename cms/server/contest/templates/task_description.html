@@ -157,18 +157,18 @@
     </colgroup>
     <tbody>
         <tr>
-            <th style="background-color: #d1e7dd;">{% trans %}Type{% endtrans %}</th>
+            <th style="background-color: gray;">{% trans %}Type{% endtrans %}</th>
             <td colspan="2" style="font-family: 'Arial', sans-serif; font-size: 14px; color: #333;">{% set task_type = get_task_type(dataset=task.active_dataset) %}{{ task_type.name }}</td>
         </tr>
 {% if task.active_dataset.time_limit is not none %}
         <tr>
-            <th style="background-color:#d1e7dd;">{% trans %}Time limit{% endtrans %}</th>
+            <th style="background-color:gray;">{% trans %}Time limit{% endtrans %}</th>
             <td colspan="2" style="font-family: 'Arial', sans-serif; font-size: 14px; color: #333;">{{ task.active_dataset.time_limit|format_duration(length="long") }}</td>
         </tr>
 {% endif %}
 {% if task.active_dataset.memory_limit is not none %}
         <tr>
-            <th style="background-color:#d1e7dd;">{% trans %}Memory limit{% endtrans %}</th>
+            <th style="background-color:gray;">{% trans %}Memory limit{% endtrans %}</th>
             <td colspan="2" style="font-family: 'Arial', sans-serif; font-size: 14px; color: #333;">{{ task.active_dataset.memory_limit|format_size }}</td>
         </tr>
 {% endif %}
@@ -176,7 +176,7 @@
 {% if compilation_commands is not none %}
 {% set compilation_commands = compilation_commands|dictselect("in", contest.languages, by="key") %}
 <tr>
-    <th rowspan="{{ compilation_commands|length }}"  style="background-color: #d1e7dd;">{% trans %}Compilation commands{% endtrans %}</th>
+    <th rowspan="{{ compilation_commands|length }}"  style="background-color: gray;">{% trans %}Compilation commands{% endtrans %}</th>
     {% for l, c in compilation_commands|dictsort(by="key") %}
         {% if not loop.first %}
 </tr>
@@ -194,7 +194,7 @@
 
 {% if tokens_contest != TOKEN_MODE_DISABLED and tokens_tasks != TOKEN_MODE_DISABLED %}
 <tr>
-    <th  style="background-color:#d1e7dd;">{% trans %}Tokens{% endtrans %}</th>
+    <th  style="background-color:gray;">{% trans %}Tokens{% endtrans %}</th>
     <td colspan="2" class="token_rules" style="font-family: 'Arial', sans-serif; font-size: 14px; color: #333;">
     {% if tokens_contest == TOKEN_MODE_INFINITE and tokens_tasks == TOKEN_MODE_INFINITE %}
         <p>
