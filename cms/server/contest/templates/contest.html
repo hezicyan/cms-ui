@@ -5,45 +5,55 @@
 {% endblock title %}
 
 {% block js %}
-
-
-    <script>
+<script>
 var LANGUAGES = {
 {% for lang in contest.languages %}
-     '{{ lang }}': {
-{% for extension in (lang|to_language).source_extensions %}
-                '{{ extension }}': true,
+    '{{ lang }}': {
+    {% for extension in (lang|to_language).source_extensions %}
+        '{{ extension }}': true,
+    {% endfor %}
+    },
 {% endfor %}
-            },
-{% endfor %}
-    };
+};
 
 {% if participation is undefined %}
- var utils = new CMS.CWSUtils("{{ url() }}", "{{ contest_url() }}", "{{ contest.name }}",
+var utils = new CMS.CWSUtils("{{ url() }}", "{{ contest_url() }}", "{{ contest.name }}",
                              0, 0, 0, 0, 0);
- {% else %}
+    {% if handler.get_argument("login_error", "") != "" %}
+document.addEventListener("DOMContentLoaded", () => {
+    utils.display_notification(
+        "notification",
+        Date.now(),
+        "",
+        "{% trans %}Failed to log in.{% endtrans %}",
+        "danger",
+        false,
+    );
+});
+    {% endif %}
+{% else %}
 // FIXME use Date objects
 var utils = new CMS.CWSUtils("{{ url() }}", "{{ contest_url() }}", "{{ contest.name }}",
-                                     {{ now|make_timestamp }},
-                                     {# What we do is: if timezone is +HH:MM we return the UNIX timestamp + 3600*HH + 60*MM. #}
-                                     {{ now.replace(tzinfo=utc).astimezone(timezone).replace(tzinfo=none)|make_timestamp }},
-                                     {{ current_phase_begin|make_timestamp }},
-                                     {{ current_phase_end|make_timestamp }},
-                                     {{ actual_phase }});
- $(document).ready(function () {
+                             {{ now|make_timestamp }},
+                             {# What we do is: if timezone is +HH:MM we return the UNIX timestamp + 3600*HH + 60*MM. #}
+                             {{ now.replace(tzinfo=utc).astimezone(timezone).replace(tzinfo=none)|make_timestamp }},
+                             {{ current_phase_begin|make_timestamp }},
+                             {{ current_phase_end|make_timestamp }},
+                             {{ actual_phase }});
+document.addEventListener("DOMContentLoaded", () => {
     utils.update_time({% if contest.per_user_time is not none %}true{% else %}false{% endif %});
     var timer = setInterval(function() {
-                utils.update_time({% if contest.per_user_time is not none %}true{% else %}false{% endif %}, timer);
-            }, 1000);
-            utils.update_unread_count(0{% if page == "communication" %}, 0{% endif %});
-            utils.update_notifications(true);
-            setInterval(function() { utils.update_notifications(); }, 30000);
-            $('#main').css('top', $('#navigation_bar').outerHeight());
-        });
-        {% endif %}
+        utils.update_time({% if contest.per_user_time is not none %}true{% else %}false{% endif %}, timer);
+    }, 1000);
+    utils.update_unread_count(0{% if page == "communication" %}, 0{% endif %});
+    utils.update_notifications(true);
+    setInterval(function() { utils.update_notifications(); }, 30000);
+    {# TODO: set 'top' of <main> to the outer height of <header> #}
+});
+{% endif %}
 
-        {% block additional_js %}{% endblock additional_js %}
-    </script>
+{% block additional_js %}{% endblock additional_js %}
+</script>
 {% endblock js %}
 
 {% block body %}
@@ -96,17 +106,10 @@ var utils = new CMS.CWSUtils("{{ url() }}", "{{ contest_url() }}", "{{ contest.n
         </nav>
     </header>
 
-    <div class="flex-grow-1 container-fluid d-flex justify-content-center align-items-center">
+    <div class="flex-grow-1 container-fluid d-flex justify-content-center align-items-center position-relative">
+        {# FIXME: use position-fixed to avoid scrolling #}
+        <div class="toast-container position-absolute top-0 end-0 p-3" id="notifications"></div>
     {% if participation is undefined %}
-        {% if handler.get_argument("login_error", "") != "" %}
-        {# FIXME: use toast #}
-        <div id="notifications" class="notifications">
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                <h4 class="alert-heading">{% trans %}Failed to log in.{% endtrans %}</h4>
-            </div>
-        </div>
-        {% endif %}
         <div class="container card rounded-5 shadow login_box py-2">
             <div class="card-body px-5 py-4">
                 <h2 class="card-title">{% trans %}Welcome{% endtrans %}</h2>
@@ -145,7 +148,6 @@ var utils = new CMS.CWSUtils("{{ url() }}", "{{ contest_url() }}", "{{ contest.n
             </div>
         </div>
     {% else %}
-        <div id="notifications" class="notifications"></div>
         <!-- Some hidden divs for translations used by JS -->
         <div style="display: none" id="translation_new_message">{% trans %}New message{% endtrans %}</div>
         <div style="display: none" id="translation_new_announcement">{% trans %}New announcement{% endtrans %}</div>
