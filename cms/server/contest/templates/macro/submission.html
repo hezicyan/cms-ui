@@ -82,7 +82,7 @@ official (boolean): whether to display only the official (true) or unofficial
     {% set num_displayed = (submissions|selectattr("official")|list|length if official else submissions|rejectattr("official")|list|length) > 0 %}
     {% if num_displayed == 0 %}
         <tr>
-            <td colspan="{{ num_cols }}" class="text-center fst-italic fs-4 text-body-secondary">
+            <td colspan="{{ num_cols }}" class="fst-italic fs-4 text-body-secondary">
                 {% trans %}no submissions{% endtrans %}
             </td>
         </tr>
