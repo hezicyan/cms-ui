@@ -228,8 +228,14 @@ msgstr "询问列表"
 msgid "Subject"
 msgstr "标题"
 
+msgid "Enter subject..."
+msgstr "请输入标题"
+
 msgid "Text"
 msgstr "内容"
+
+msgid "Enter your question..."
+msgstr "请输入你的问题"
 
 msgid "Ask question"
 msgstr "询问新问题"

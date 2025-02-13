@@ -313,8 +313,14 @@ msgstr "詢問列表"
 msgid "Subject"
 msgstr "標題"
 
+msgid "Enter subject..."
+msgstr "請輸入標題"
+
 msgid "Text"
 msgstr "內容"
+
+msgid "Enter your question..."
+msgstr "請輸入你的問題"
 
 msgid "Ask question"
 msgstr "詢問新問題"
@@ -419,6 +425,9 @@ msgstr "擅自以非正當方式操作本系統將導致取消競賽資格."
 msgid "If you encountered this error during normal usage, please notify the contest administrators."
 msgstr "若在正常使用的情況下發生錯誤, 請聯絡管理員."
 
+msgid "Return to Home Page"
+msgstr "回到首頁"
+
 msgid "General information"
 msgstr "競賽資訊"
 
@@ -467,6 +476,9 @@ msgstr "Token 分為兩類: 競賽-Token (競賽共用的 Token), 與題目-Toke
 
 msgid "You can see the detailed result of a submission by using two tokens on it, one of each type."
 msgstr "對於每次傳送而言, 使用兩類 Token 各一枚即可觀看該次詳細的評測結果."
+
+msgid "Time Frame"
+msgstr "計時器"
 
 #, python-format
 msgid "Every user is allowed to compete (i.e. submit solutions) for a uninterrupted time frame of %(per_user_time)s."
