@@ -160,13 +160,9 @@ $(document).ready(function () {
 
 <div class="container">
 
-{# TODO: extract common styling as .page-header, perhaps by using SASS #}
-<div class="mb-5">
-    <h1 class="display-4 fw-bold text-primary mb-3 text-center">
-        {% trans name=task.title, short_name=task.name %}{{ name }} ({{ short_name }}) <small>submissions</small>{% endtrans %}
-    </h1>
-    <hr class="w-50 mx-auto border-primary opacity-75">
-</div>
+<h6 class="page-header">
+    {% trans name=task.title, short_name=task.name %}{{ name }} ({{ short_name }}) submissions{% endtrans %}
+</h6>
 
 <div class="container-fluid d-flex flex-column gap-5">
 
