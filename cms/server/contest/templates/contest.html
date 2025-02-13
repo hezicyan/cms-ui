@@ -52,6 +52,22 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 {% endif %}
 
+function updatePosition() {
+    // Toast container
+    const toastContainer = document.getElementById("notifications");
+    const header = document.getElementsByTagName("header")[0];
+    toastContainer.style.top = `${header.offsetHeight}px`;
+
+    // Sidebar
+    const sidebar = document.getElementsByTagName("aside")[0];
+    // 1rem = .mt-3 is the margin-top of the page content
+    sidebar.style.top = `calc(${header.offsetHeight}px + 1rem)`;
+    sidebar.style.height = `calc(100vh - ${header.offsetHeight}px - 1rem)`;
+}
+
+document.addEventListener("DOMContentLoaded", updatePosition);
+window.addEventListener("resize", updatePosition);
+
 {% block additional_js %}{% endblock additional_js %}
 </script>
 {% endblock js %}
@@ -106,9 +122,9 @@ document.addEventListener("DOMContentLoaded", () => {
         </nav>
     </header>
 
+    <div class="toast-container position-fixed end-0 p-3" id="notifications"></div>
+
     <div class="flex-grow-1 container-fluid d-flex justify-content-center align-items-center position-relative">
-        {# FIXME: use position-fixed to avoid scrolling #}
-        <div class="toast-container position-absolute top-0 end-0 p-3" id="notifications"></div>
     {% if participation is undefined %}
         <div class="container card rounded-5 shadow login_box py-2">
             <div class="card-body px-5 py-4">

@@ -334,8 +334,6 @@ div.register_box {
 .sidebar {
     flex: 0 0 20%;
     max-width: 250px;
-    top: 5rem;
-    height: calc(100vh - 5rem);
 }
 
 /*** Unread count */
