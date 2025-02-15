@@ -555,8 +555,8 @@ msgid "Standard error"
 msgstr "标准错误输出（stderr）"
 
 #, python-format
-msgid "%(name)s (%(short_name)s) description"
-msgstr "%(name)s (%(short_name)s) 题目描述"
+msgid "%(name)s (%(short_name)s) <small>description</small>"
+msgstr "%(name)s (%(short_name)s) <small>题目描述</small>"
 
 msgid "no statement available"
 msgstr "本题没有描述"
@@ -602,8 +602,8 @@ msgid "Attachments"
 msgstr "附件"
 
 #, python-format
-msgid "%(name)s (%(short_name)s) submissions"
-msgstr "%(name)s (%(short_name)s) 评测页面"
+msgid "%(name)s (%(short_name)s) <small>submissions</small>"
+msgstr "%(name)s (%(short_name)s) <small>评测页面</small>"
 
 msgid "Submit a solution"
 msgstr "提交解答"
