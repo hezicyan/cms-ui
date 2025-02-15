@@ -15,72 +15,86 @@
             </div>
         </div>
     </div>
-    <div class="list-group overflow-y-auto shadow">
-        <a
-            href="{{ contest_url() }}"
-            class="list-group-item list-group-item-action{% if page == 'overview' %} active{% endif %}"
-        >
-            {% trans %}Overview{% endtrans %}
-        </a>
-        <a
-            href="{{ contest_url('communication') }}"
-            class="list-group-item list-group-item-action{% if page == 'communication' %} active{% endif %}"
-        >
-            <div class="d-flex justify-content-between align-items-center">
-                {% trans %}Communication{% endtrans %}
-                <span id="unread_count" class="badge rounded-pill text-bg-warning"></span>
-            </div>
-        </a>
-        {% if actual_phase == 0 or actual_phase == 3 or participation.unrestricted %}
-            {% for t_iter in contest.tasks %}
-                <div class="hovermenu task-nav">
-                    <button type="button" class="list-group-item list-group-item-action">
-                        {{ t_iter.name }}
-                    </button>
-                    <ul class="dropdown-menu shadow">
-                        <li class="mx-1">
-                            <a
-                                href="{{ contest_url('tasks', t_iter.name, 'description') }}"
-                                class="dropdown-item rounded{% if page == 'task_description' and task == t_iter %} active{% endif %}"
-                            >
-                                {% trans %}Statement{% endtrans %}
-                            </a>
-                        </li>
-                        <li class="mx-1">
-                            <a
-                                href="{{ contest_url('tasks', t_iter.name, 'submissions') }}"
-                                class="dropdown-item rounded{% if page == 'task_submissions' and task == t_iter %} active{% endif %}"
-                            >
-                                {% trans %}Submissions{% endtrans %}
-                            </a>
-                        </li>
-                    </ul>
+    <ul class="nav nav-pills flex-column overflow-y-auto shadow rounded">
+        <li class="nav-item">
+            <a
+                href="{{ contest_url() }}"
+                class="nav-link{% if page == 'overview' %} active{% endif %}"
+            >
+                {% trans %}Overview{% endtrans %}
+            </a>
+        </li>
+        <li class="nav-item">
+            <a
+                href="{{ contest_url('communication') }}"
+                class="nav-link{% if page == 'communication' %} active{% endif %}"
+            >
+                <div class="d-flex justify-content-between align-items-center">
+                    {% trans %}Communication{% endtrans %}
+                    <span id="unread_count" class="badge rounded-pill text-bg-warning"></span>
                 </div>
+            </a>
+        </li>
+        {% if actual_phase == 0 or actual_phase == 3 or participation.unrestricted %}
+        <li class="border-top my-1"></li>
+            {% for t_iter in contest.tasks %}
+        <li class="nav-item">
+            <div class="hovermenu task-nav">
+                <a class="nav-link{% if task is defined and task == t_iter %} active{% endif %}">
+                    {{ t_iter.name }}
+                </a>
+                <ul class="dropdown-menu shadow">
+                    <li class="mx-1">
+                        <a
+                            href="{{ contest_url('tasks', t_iter.name, 'description') }}"
+                            class="dropdown-item rounded{% if page == 'task_description' and task == t_iter %} active{% endif %}"
+                        >
+                            {% trans %}Statement{% endtrans %}
+                        </a>
+                    </li>
+                    <li class="mx-1">
+                        <a
+                            href="{{ contest_url('tasks', t_iter.name, 'submissions') }}"
+                            class="dropdown-item rounded{% if page == 'task_submissions' and task == t_iter %} active{% endif %}"
+                        >
+                            {% trans %}Submissions{% endtrans %}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
             {% endfor %}
+        <li class="border-top my-1"></li>
         {% endif %}
-        <a
-            href="{{ contest_url('documentation') }}"
-            class="list-group-item list-group-item-action{% if page == 'documentation' %} active{% endif %}"
-        >
-            {% trans %}Documentation{% endtrans %}
-        </a>
+        <li class="nav-item">
+            <a
+                href="{{ contest_url('documentation') }}"
+                class="nav-link{% if page == 'documentation' %} active{% endif %}"
+            >
+                {% trans %}Documentation{% endtrans %}
+            </a>
+        </li>
         {% if actual_phase == 0 or participation.unrestricted %}
             {% if testing_enabled %}
+            <li class="nav-item">
                 <a
                     href="{{ contest_url('testing') }}"
-                    class="list-group-item list-group-item-action{% if page == 'test_interface' %} active{% endif %}"
+                    class="nav-link{% if page == 'test_interface' %} active{% endif %}"
                 >
                     {% trans %}Testing{% endtrans %}
                 </a>
+            </li>
             {% endif %}
             {% if printing_enabled %}
+            <li class="nav-item">
                 <a
                     href="{{ contest_url('printing') }}"
-                    class="list-group-item list-group-item-action{% if page == 'printing' %} active{% endif %}"
+                    class="nav-link{% if page == 'printing' %} active{% endif %}"
                 >
                     {% trans %}Testing{% endtrans %}
                 </a>
+            </li>
             {% endif %}
         {% endif %}
-    </div>
+    </ul>
 </aside>

@@ -51,11 +51,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.querySelectorAll(".task-nav").forEach(taskEle => {
         const dropdownMenu = taskEle.getElementsByClassName("dropdown-menu")[0];
-        taskEle.addEventListener("mouseenter", () => {
+        const offset = (taskEle.offsetHeight - dropdownMenu.offsetHeight) / 2;
+        const adjustPosition = () => {
             const rect = taskEle.getBoundingClientRect();
-            dropdownMenu.style.top = `${rect.top}px`;
+            dropdownMenu.style.top = `${rect.top + offset}px`;
             dropdownMenu.style.left = `${rect.right}px`;
-        });
+        };
+        adjustPosition();
+        taskEle.addEventListener("mouseenter", adjustPosition);
     });
 });
 {% endif %}

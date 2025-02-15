@@ -336,6 +336,73 @@ div.register_box {
     max-width: 250px;
 }
 
+.sidebar .nav .nav-link {
+    color: var(--bs-body-color);
+}
+
+.sidebar .nav .nav-link:hover,
+.sidebar .nav .nav-link:focus,
+.sidebar .nav .hovermenu:hover .nav-link,
+.sidebar .nav .hovermenu:focus .nav-link {
+    color: var(--bs-body-color);
+    background-color: var(--bs-tertiary-bg);
+}
+
+.sidebar .nav .nav-link.active,
+.sidebar .nav .nav-link:active,
+.sidebar .nav .hovermenu:hover .nav-link.active,
+.sidebar .nav .hovermenu:focus .nav-link:active {
+    color: #fff;
+    background-color: #0d6efd;
+}
+
+/*** Dropdown list with hover effects */
+
+.dropdown-menu .dropdown-item {
+    /* Same as .nav-link */
+    transition:
+        color 0.15s ease-in-out,
+        background-color 0.15s ease-in-out,
+        border-color 0.15s ease-in-out;
+}
+
+.hovermenu .dropdown-menu {
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+    transition:
+        visibility 0.25s ease-in-out,
+        opacity 0.25s ease-in-out,
+        margin-left 0.25s ease-in-out,
+        max-height 0.25s ease-in-out;
+}
+
+.hovermenu:hover .dropdown-menu {
+    display: block;
+    visibility: visible;
+    opacity: 1;
+}
+
+#lang_dropdown_list {
+    max-height: 0;
+    right: 0;
+    left: auto;
+    transform: translateY(0.2rem);
+}
+
+.hovermenu:hover #lang_dropdown_list {
+    max-height: 30rem;
+}
+
+.task-nav .dropdown-menu {
+    position: fixed;
+    margin-left: 0;
+}
+
+.task-nav:hover .dropdown-menu {
+    margin-left: 0.3rem;
+}
+
 /*** Unread count */
 
 #unread_count.no_unread {
@@ -723,45 +790,6 @@ td.token_rules p:last-child {
     height: 32px;
     width: 32px;
     margin: 0 auto 12px;
-}
-
-/*** Dropdown list with hover effects */
-
-.hovermenu .dropdown-menu {
-    display: block;
-    visibility: hidden;
-    opacity: 0;
-    transition:
-        visibility 0.4s ease,
-        opacity 0.4s ease,
-        margin-left 0.4s ease,
-        max-height 0.4s ease;
-}
-
-.hovermenu:hover .dropdown-menu {
-    display: block;
-    visibility: visible;
-    opacity: 1;
-}
-
-#lang_dropdown_list {
-    max-height: 0;
-    right: 0;
-    left: auto;
-    transform: translateY(0.2rem);
-}
-
-.hovermenu:hover #lang_dropdown_list {
-    max-height: 30rem;
-}
-
-.task-nav .dropdown-menu {
-    position: fixed;
-    margin-left: 0;
-}
-
-.task-nav:hover .dropdown-menu {
-    margin-left: 0.3rem;
 }
 
 /** Printing interface */
