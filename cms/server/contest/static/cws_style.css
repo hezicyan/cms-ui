@@ -356,16 +356,9 @@ td.token_rules p:last-child {
 
 /*** Task score */
 
-.task_score_container {
-    display: flex;
-    justify-content: space-evenly;
-    font-weight: bold;
-}
-
 .task_score {
     flex: 1 1 0;
     border-width: medium;
-    max-width: calc(20rem + 5vw);
 }
 
 .task_score .spinner-border {

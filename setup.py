@@ -53,6 +53,7 @@ PACKAGE_DATA = {
         "contest/static/js/*.*",
         "contest/templates/*.*",
         "contest/templates/macro/*.*",
+        "contest/templates/components/*.*",
     ],
     "cms.service": [
         "templates/printing/*.*",
