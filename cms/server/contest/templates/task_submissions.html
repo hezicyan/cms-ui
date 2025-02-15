@@ -267,7 +267,11 @@ $(document).ready(function () {
 </div>
 {# END: previous submissions #}
 
-{# BEGIN: submission detail #}
+</div>
+</div>
+{% endblock core %}
+
+{% block modal %}
 <div class="modal fade" id="submission_detail">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
@@ -283,8 +287,4 @@ $(document).ready(function () {
         </div>
     </div>
 </div>
-{# END: submission detail #}
-
-</div>
-</div>
-{% endblock core %}
+{% endblock modal %}
