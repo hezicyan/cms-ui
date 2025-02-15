@@ -190,27 +190,6 @@ div.register_box {
     }
 }
 
-/*** Page header */
-
-.page-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 2rem;
-    /* .fw-semibold */
-    font-weight: 600;
-    /* .text-body-secondary */
-    color: var(--bs-secondary-color);
-    --bs-text-opacity: 1;
-}
-
-.page-header::before {
-    content: '';
-    flex-grow: 1;
-    height: 1px;
-    background-color: darkgray;
-    margin-right: 1rem;
-}
-
 /*** Task statement */
 
 .task_description .statement.no_statement {

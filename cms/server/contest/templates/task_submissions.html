@@ -158,12 +158,6 @@ $(document).ready(function () {
 
 {% block core %}
 
-<div class="container">
-
-<h6 class="page-header">
-    {% trans name=task.title, short_name=task.name %}{{ name }} ({{ short_name }}) submissions{% endtrans %}
-</h6>
-
 <div class="container-fluid row g-4">
 
 {% set two_column_submission =
@@ -267,7 +261,6 @@ $(document).ready(function () {
 </div>
 {# END: previous submissions #}
 
-</div>
 </div>
 {% endblock core %}
 
