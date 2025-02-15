@@ -725,14 +725,20 @@ td.token_rules p:last-child {
     margin: 0 auto 12px;
 }
 
-.dropdown.hover .dropdown-menu {
+/*** Dropdown list with hover effects */
+
+.hovermenu .dropdown-menu {
     display: block;
     visibility: hidden;
     opacity: 0;
-    transition: all 0.4s ease;
+    transition:
+        visibility 0.4s ease,
+        opacity 0.4s ease,
+        margin-left 0.4s ease,
+        max-height 0.4s ease;
 }
 
-.dropdown.hover:hover .dropdown-menu {
+.hovermenu:hover .dropdown-menu {
     display: block;
     visibility: visible;
     opacity: 1;
@@ -745,8 +751,17 @@ td.token_rules p:last-child {
     transform: translateY(4px);
 }
 
-.dropdown.hover:hover #lang_dropdown_list {
+.hovermenu:hover #lang_dropdown_list {
     max-height: 30em;
+}
+
+.task-nav .dropdown-menu {
+    position: fixed;
+    margin-left: 0;
+}
+
+.task-nav:hover .dropdown-menu {
+    margin-left: 0.3rem;
 }
 
 /** Printing interface */

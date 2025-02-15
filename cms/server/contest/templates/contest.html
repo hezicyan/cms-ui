@@ -48,7 +48,15 @@ document.addEventListener("DOMContentLoaded", () => {
     utils.update_unread_count(0{% if page == "communication" %}, 0{% endif %});
     utils.update_notifications(true);
     setInterval(function() { utils.update_notifications(); }, 30000);
-    {# TODO: set 'top' of <main> to the outer height of <header> #}
+
+    document.querySelectorAll(".task-nav").forEach(taskEle => {
+        const dropdownMenu = taskEle.getElementsByClassName("dropdown-menu")[0];
+        taskEle.addEventListener("mouseenter", () => {
+            const rect = taskEle.getBoundingClientRect();
+            dropdownMenu.style.top = `${rect.top}px`;
+            dropdownMenu.style.left = `${rect.right}px`;
+        });
+    });
 });
 {% endif %}
 
@@ -93,7 +101,7 @@ window.addEventListener("resize", updatePosition);
                 </form>
 {% endif %}
 {% if available_translations|length > 1 %}
-                <div class="dropdown hover w-auto align-self-bottom">
+                <div class="hovermenu w-auto">
                     <button type="button" class="btn btn-light"><i class="bi bi-translate h5"></i></button>
                     <ul id="lang_dropdown_list" class="dropdown-menu overflow-y-auto w-auto shadow">
                         <li class="mx-1">
@@ -177,90 +185,7 @@ window.addEventListener("resize", updatePosition);
         <!-- End -->
 
         <div class="container-fluid d-inline-flex gap-3 mt-3">
-            <aside class="sidebar d-flex flex-column gap-3 sticky-top">
-                <div id="countdown_box" class="card shadow">
-                    <div class="card-body">
-                        <div
-                            class="w-100 d-inline-flex justify-content-center align-items-baseline gap-1 text-body-secondary fs-4"
-                        >
-                            <i class="bi bi-hourglass-split"></i>
-                            <span id="countdown" class="font-monospace"></span>
-                        </div>
-                        <div
-                            class="w-100 d-inline-flex justify-content-center align-items-baseline gap-1 text-body-secondary small"
-                        >
-                            <i class="bi bi-clock"></i>
-                            <span id="server_time" class="font-monospace"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group overflow-y-auto shadow">
-                    <a
-                        href="{{ contest_url() }}"
-                        class="list-group-item list-group-item-action{% if page == 'overview' %} active{% endif %}"
-                    >
-                        {% trans %}Overview{% endtrans %}
-                    </a>
-                    <a
-                        href="{{ contest_url('communication') }}"
-                        class="list-group-item list-group-item-action{% if page == 'communication' %} active{% endif %}"
-                    >
-                        <div class="d-flex justify-content-between align-items-center">
-                            {% trans %}Communication{% endtrans %}
-                            <span id="unread_count" class="badge rounded-pill text-bg-warning"></span>
-                        </div>
-                    </a>
-                    {% if actual_phase == 0 or actual_phase == 3 or participation.unrestricted %}
-                        {% for t_iter in contest.tasks %}
-                            <button
-                                class="list-group-item list-group-item-action"
-                                data-bs-toggle="collapse"
-                                data-bs-target="#sidebar-task{{ loop.index }}"
-                            >
-                                {{ t_iter.name }}
-                            </button>
-                            <div class="collapse{% if task is defined and task == t_iter %} show{% endif %}" id="sidebar-task{{ loop.index }}">
-                                <a
-                                    href="{{ contest_url('tasks', t_iter.name, 'description') }}"
-                                    class="list-group-item list-group-item-action ps-4{% if page == 'task_description' and task == t_iter %} active{% endif %}"
-                                >
-                                    {% trans %}Statement{% endtrans %}
-                                </a>
-                                <a
-                                    href="{{ contest_url('tasks', t_iter.name, 'submissions') }}"
-                                    class="list-group-item list-group-item-action ps-4{% if page == 'task_submissions' and task == t_iter %} active{% endif %}"
-                                >
-                                    {% trans %}Submissions{% endtrans %}
-                                </a>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                    <a
-                        href="{{ contest_url('documentation') }}"
-                        class="list-group-item list-group-item-action{% if page == 'documentation' %} active{% endif %}"
-                    >
-                        {% trans %}Documentation{% endtrans %}
-                    </a>
-                    {% if actual_phase == 0 or participation.unrestricted %}
-                        {% if testing_enabled %}
-                            <a
-                                href="{{ contest_url('testing') }}"
-                                class="list-group-item list-group-item-action{% if page == 'test_interface' %} active{% endif %}"
-                            >
-                                {% trans %}Testing{% endtrans %}
-                            </a>
-                        {% endif %}
-                        {% if printing_enabled %}
-                            <a
-                                href="{{ contest_url('printing') }}"
-                                class="list-group-item list-group-item-action{% if page == 'printing' %} active{% endif %}"
-                            >
-                                {% trans %}Testing{% endtrans %}
-                            </a>
-                        {% endif %}
-                    {% endif %}
-                </div>
-            </aside>
+            {% include "sidebar.html" %}
             <main class="flex-grow-1 mb-5">
                 {% block core %}{% endblock core %}
             </main>
