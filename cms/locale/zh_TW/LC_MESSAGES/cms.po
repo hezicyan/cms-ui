@@ -571,8 +571,8 @@ msgid "Standard error"
 msgstr "編譯錯誤訊息 (stderr)"
 
 #, python-format
-msgid "%(name)s (%(short_name)s) description"
-msgstr "%(name)s (%(short_name)s) 題目敘述"
+msgid "%(name)s (%(short_name)s) <small>description</small>"
+msgstr "%(name)s (%(short_name)s) <small>題目敘述</small>"
 
 msgid "no statement available"
 msgstr "本題沒有敘述"
@@ -621,8 +621,8 @@ msgid "loading..."
 msgstr "載入中..."
 
 #, python-format
-msgid "%(name)s (%(short_name)s) submissions"
-msgstr "%(name)s (%(short_name)s) 評測頁面"
+msgid "%(name)s (%(short_name)s) <small>submissions</small>"
+msgstr "%(name)s (%(short_name)s) <small>評測頁面</small>"
 
 msgid "Submit a solution"
 msgstr "傳送作答"
