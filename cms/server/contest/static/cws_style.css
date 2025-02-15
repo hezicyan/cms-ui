@@ -748,11 +748,11 @@ td.token_rules p:last-child {
     max-height: 0;
     right: 0;
     left: auto;
-    transform: translateY(4px);
+    transform: translateY(0.2rem);
 }
 
 .hovermenu:hover #lang_dropdown_list {
-    max-height: 30em;
+    max-height: 30rem;
 }
 
 .task-nav .dropdown-menu {
