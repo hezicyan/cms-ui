@@ -17,7 +17,7 @@
                 {{ score_type.format_score(public_score, score_type.max_public_score, none, task.score_precision, translation=translation) }}
             </span>
     {% if is_score_partial %}
-            {% include "spinner.html" %}
+            {% include "components/spinner.html" %}
     {% endif %}
         </div>
     </div>

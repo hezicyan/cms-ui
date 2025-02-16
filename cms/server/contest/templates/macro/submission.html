@@ -153,7 +153,7 @@ submissions_download_allowed (bool): whether to allow users to download
             {# macro_common.spinner() #}
 {% elif status == SubmissionResult.COMPILATION_FAILED %}
             {% trans %}Compilation failed{% endtrans %}
-            {% include "submission_detail_button.html" %}
+            {% include "components/submission_detail_button.html" %}
 {% elif status == SubmissionResult.EVALUATING %}
             {% trans %}Evaluating...{% endtrans %}
             {# macro_common.spinner() #}
@@ -162,7 +162,7 @@ submissions_download_allowed (bool): whether to allow users to download
             {# macro_common.spinner() #}
 {% elif status == SubmissionResult.SCORED %}
             {% trans %}Evaluated{% endtrans %}
-            {% include "submission_detail_button.html" %}
+            {% include "components/submission_detail_button.html" %}
 {% endif %}
         </div>
     </td>

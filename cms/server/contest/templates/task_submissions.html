@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const submissionId = button.closest("[data-submission]").getAttribute("data-submission");
         const modalBody = submissionDetailModal.querySelector(".modal-body");
         console.log(modalBody);
-        modalBody.innerHTML = `{% include "spinner.html" %}`;
+        modalBody.innerHTML = `{% include "components/spinner.html" %}`;
         const response = await fetch(
             utils.contest_url("tasks", "{{ task.name }}", "submissions", submissionId, "details"),
         );
@@ -86,7 +86,7 @@ update_score = function(score_elem, task_score_elem,
     var task_score_span = task_score_elem.find(".score");
     task_score_span.text(task_score_message);
     if (task_score_is_partial) {
-        task_score_span.after(`{% include "spinner.html" %}`);
+        task_score_span.after(`{% include "components/spinner.html" %}`);
     } else {
         task_score_span.next().remove();
     }
@@ -104,9 +104,9 @@ update_scores = function (submission_id, data) {
     row.find("td.status > div").text(data["status_text"]);
     var terminal_status = is_status_terminal(data["status"]);
     if (!terminal_status) {
-        row.find("td.status > div").append(`{% include "spinner.html" %}`);
+        row.find("td.status > div").append(`{% include "components/spinner.html" %}`);
     } else {
-        row.find("td.status > div").append($(`{% include "submission_detail_button.html" %}`));
+        row.find("td.status > div").append($(`{% include "components/submission_detail_button.html" %}`));
     }
     if (terminal_status) {
         update_score(
