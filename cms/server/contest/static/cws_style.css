@@ -4,12 +4,6 @@ body {
     overflow-y: scroll;
 }
 
-/* Remove the on-hover coloring of rows in tables with table-nohover class */
-.table.table-nohover > tbody > tr:hover > td,
-.table.table-nohover > tbody > tr:hover > th {
-    background-color: transparent !important;
-}
-
 /** Announcements, questions, answers and messages **/
 
 /* Almost "copy" Bootstrap rules for alert-info */
@@ -190,124 +184,105 @@ div.register_box {
     }
 }
 
+/*** Section header */
+section h3 {
+    /* .text-body-secondary */
+    color: var(--bs-secondary-color);
+}
+
 /*** Task statement */
 
-.task_description .statement.no_statement {
-    font-size: 1.2em;
-    font-style: italic;
-    text-align: center;
+/** Attachments */
+
+.btn-attachment {
+    /* .btn-light without --bs-btn-bg and --bs-border-color */
+    --bs-btn-color: #000;
+    --bs-btn-hover-color: #000;
+    --bs-btn-hover-bg: #d3d4d5;
+    --bs-btn-hover-border-color: #c6c7c8;
+    --bs-btn-focus-shadow-rgb: 211, 212, 213;
+    --bs-btn-active-color: #000;
+    --bs-btn-active-bg: #c6c7c8;
+    --bs-btn-active-border-color: #babbbc;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #000;
+    --bs-btn-disabled-bg: #f8f9fa;
+    --bs-btn-disabled-border-color: #f8f9fa;
 }
 
-.task_description .statement.one_statement {
-    text-align: center;
-}
-
-@media (max-width: 767px) {
-    .task_description .statement.many_statements .main_statements {
-        margin-bottom: 15px;
-    }
-
-    .task_description .statement.many_statements .all_statements div {
-        max-height: 280px;
-    }
-}
-
-@media (min-width: 768px) {
-    .task_description .statement.many_statements {
-        min-height: 238px;
-        position: relative;
-    }
-
-    .task_description .statement.many_statements .all_statements {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-        margin: 0;
-    }
-
-    .task_description .statement.many_statements .all_statements div {
-        height: 100%;
-    }
-}
-
-@media (min-width: 768px) and (max-width: 979px) {
-    .task_description .statement.many_statements .main_statements {
-        width: 290px;
-    }
-
-    .task_description .statement.many_statements .all_statements {
-        width: 228px;
-    }
-}
-
-@media (min-width: 980px) and (max-width: 1199px) {
-    .task_description .statement.many_statements .main_statements {
-        width: 380px;
-    }
-
-    .task_description .statement.many_statements .all_statements {
-        width: 300px;
-    }
-}
-
-@media (min-width: 1200px) {
-    .task_description .statement.many_statements .main_statements {
-        width: 470px;
-    }
-
-    .task_description .statement.many_statements .all_statements {
-        width: 370px;
-    }
-}
-
-.task_description .statement.many_statements .main_statements {
-    text-align: center;
-}
-
-.task_description .statement.many_statements .main_statements p {
-    text-align: left;
-}
-
-.task_description .statement.many_statements .main_statements p:last-child {
-    margin-bottom: 5px;
-}
-
-.task_description .statement.many_statements .main_statements a.btn {
-    min-width: 50%;
-    margin: 5px;
-}
-
-.task_description .statement.many_statements .all_statements {
-    padding: 5px;
-}
-
-.task_description .statement.many_statements .all_statements div {
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    overflow-y: auto;
-    padding: 0;
-}
-
-.task_description .statement.many_statements .all_statements div ul {
-    margin: 5px 5px 5px 25px;
-}
-
-/*** Compilation commands */
-
-.compilation_command_cell {
-    padding: 5px !important;
-}
-
-.compilation_command {
-    display: block;
-}
-
-.compilation_command + .compilation_command {
-    margin-top: 5px;
-}
+/* .attachments ul { */
+/*     margin-left: 0; */
+/*     list-style-type: none; */
+/*     -webkit-column-count: 3; */
+/*     -webkit-column-gap: 8px; */
+/*     -moz-column-count: 3; */
+/*     -moz-column-gap: 8px; */
+/*     column-count: 3; */
+/*     column-gap: 8px; */
+/* } */
+/**/
+/* .attachments ul li { */
+/*     -webkit-column-break-inside: avoid; */
+/*     -webkit-break-inside: avoid; */
+/*     -moz-break-inside: avoid; */
+/*     break-inside: avoid; */
+/* } */
+/**/
+/* /* this is a really ugly hack to simulate the no-break behavior on firefox */ */
+/* @-moz-document url-prefix() { */
+/*     #attachments ul li { */
+/*         display: table; */
+/*         table-layout: fixed; */
+/*         width: 100%; */
+/*     } */
+/* } */
+/**/
+/* .attachments ul li a { */
+/*     display: block; */
+/*     height: 36px; */
+/*     margin-bottom: 8px; */
+/*     padding: 6px; */
+/*     text-align: left; */
+/* } */
+/**/
+/* .attachments ul li a:hover { */
+/*     background-color: #e3e3e3; */
+/* } */
+/**/
+/* .attachments ul li img { */
+/*     float: left; */
+/*     margin: 2px 8px 2px 2px; */
+/* } */
+/**/
+/* .attachments ul li .first_line { */
+/*     display: block; */
+/*     height: 18px; */
+/*     overflow: hidden; */
+/* } */
+/**/
+/* .attachments ul li .name { */
+/*     display: inline-block; */
+/*     max-width: 100%; */
+/*     overflow: hidden; */
+/*     text-overflow: ellipsis; */
+/*     white-space: nowrap; */
+/*     font-weight: bold; */
+/* } */
+/**/
+/* .attachments ul li .size { */
+/*     float: right; */
+/*     font-style: italic; */
+/*     /* the size floats on right of the first line if there's enough space. */
+/*        otherwise (if the name is very long) it gets shifted down, */
+/*        "disappearing" because the first line has overflow: hidden */ */
+/* } */
+/**/
+/* .attachments ul li .type { */
+/*     display: block; */
+/*     overflow: hidden; */
+/*     text-overflow: ellipsis; */
+/*     white-space: nowrap; */
+/* } */
 
 /*** Sidebar */
 .sidebar {
@@ -401,7 +376,7 @@ td.token_rules p:last-child {
 /*** Notifications */
 
 #notifications .toast {
-    backdrop-filter: blur(.4rem);
+    backdrop-filter: blur(0.4rem);
 }
 
 /*** Task score */
@@ -559,82 +534,6 @@ td.token_rules p:last-child {
     text-align: center;
     padding: 0 6%;
     font-size: 11px;
-}
-
-/*** Attachments */
-
-#attachments ul {
-    margin-left: 0;
-    list-style-type: none;
-    -webkit-column-count: 3;
-    -webkit-column-gap: 8px;
-    -moz-column-count: 3;
-    -moz-column-gap: 8px;
-    column-count: 3;
-    column-gap: 8px;
-}
-
-#attachments ul li {
-    -webkit-column-break-inside: avoid;
-    -webkit-break-inside: avoid;
-    -moz-break-inside: avoid;
-    break-inside: avoid;
-}
-
-/* this is a really ugly hack to simulate the no-break behavior on firefox */
-@-moz-document url-prefix() {
-    #attachments ul li {
-        display: table;
-        table-layout: fixed;
-        width: 100%;
-    }
-}
-
-#attachments ul li a {
-    display: block;
-    height: 36px;
-    margin-bottom: 8px;
-    padding: 6px;
-    text-align: left;
-}
-
-#attachments ul li a:hover {
-    background-color: #e3e3e3;
-}
-
-#attachments ul li img {
-    float: left;
-    margin: 2px 8px 2px 2px;
-}
-
-#attachments ul li .first_line {
-    display: block;
-    height: 18px;
-    overflow: hidden;
-}
-
-#attachments ul li .name {
-    display: inline-block;
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-weight: bold;
-}
-
-#attachments ul li .size {
-    float: right;
-    font-style: italic;
-    /* the size floats on right of the first line if there's enough space.
-       otherwise (if the name is very long) it gets shifted down,
-       "disappearing" because the first line has overflow: hidden */
-}
-
-#attachments ul li .type {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 /** Test interface */
