@@ -150,16 +150,16 @@ submissions_download_allowed (bool): whether to allow users to download
         <div class="d-flex justify-content-between align-items-center gap-3">
 {% if status == SubmissionResult.COMPILING %}
             {% trans %}Compiling...{% endtrans %}
-            {# macro_common.spinner() #}
+            {% include "components/spinner.html" %}
 {% elif status == SubmissionResult.COMPILATION_FAILED %}
             {% trans %}Compilation failed{% endtrans %}
             {% include "components/submission_detail_button.html" %}
 {% elif status == SubmissionResult.EVALUATING %}
             {% trans %}Evaluating...{% endtrans %}
-            {# macro_common.spinner() #}
+            {% include "components/spinner.html" %}
 {% elif status == SubmissionResult.SCORING %}
             {% trans %}Scoring...{% endtrans %}
-            {# macro_common.spinner() #}
+            {% include "components/spinner.html" %}
 {% elif status == SubmissionResult.SCORED %}
             {% trans %}Evaluated{% endtrans %}
             {% include "components/submission_detail_button.html" %}
