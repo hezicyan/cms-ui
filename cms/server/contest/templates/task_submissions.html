@@ -177,7 +177,7 @@ $(document).ready(function () {
 <div class="col-12">
 <div class="card shadow rounded-4">
     <div class="card-body">
-        <h2 class="card-title">{% trans %}Previous submissions{% endtrans %}</h2>
+        <h3 class="card-title">{% trans %}Previous submissions{% endtrans %}</h3>
 
 {% if can_use_tokens_in_contest and actual_phase == 0 %}
         <p class="card-text">
@@ -223,7 +223,7 @@ $(document).ready(function () {
 
 
 {% if submissions|rejectattr("official")|list|length > 0 %}
-<h3 class="card-subtitle text-body-secondary">{% trans %}Unofficial submissions{% endtrans %}</h3>
+<h3 class="card-subtitle">{% trans %}Unofficial submissions{% endtrans %}</h3>
   {{ macro_submission.rows(
       url,
       contest_url,
@@ -237,7 +237,7 @@ $(document).ready(function () {
       can_play_token_now,
       submissions_download_allowed,
       false) }}
-<h3 class="card-subtitle text-body-secondary">{% trans %}Official submissions{% endtrans %}</h3>
+<h3 class="card-subtitle">{% trans %}Official submissions{% endtrans %}</h3>
 {% endif %}
 
 {{ macro_submission.rows(

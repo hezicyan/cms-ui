@@ -184,7 +184,7 @@ div.register_box {
     }
 }
 
-/*** Section header */
+/*** Heading style */
 section h3 {
     /* .text-body-secondary */
     color: var(--bs-secondary-color);

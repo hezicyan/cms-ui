@@ -7,7 +7,7 @@
 
   {% if contest.announcements|length > 0 %}
   <section class="mb-5">
-    <h2 class="h3 mb-4 text-secondary">{% trans %}Announcements{% endtrans %}</h2>
+    <h3 class="mb-4">{% trans %}Announcements{% endtrans %}</h3>
     <div class="card shadow border-0">
       <div class="card-body p-0">
         {% for msg in contest.announcements|reverse %}
@@ -30,7 +30,7 @@
 
   {% if questions_enabled %}
   <section class="mb-5">
-    <h2 class="h3 mb-4 text-secondary">{% trans %}Questions{% endtrans %}</h2>
+    <h3 class="mb-4">{% trans %}Questions{% endtrans %}</h3>
 
     <div class="card shadow border-0">
       <div class="card-body">
@@ -119,7 +119,7 @@
 
   {% if participation.messages|length > 0 %}
   <section class="mb-4">
-    <h2 class="h3 mb-4 text-secondary">{% trans %}Messages{% endtrans %}</h2>
+    <h3 class="mb-4">{% trans %}Messages{% endtrans %}</h3>
     <div class="card shadow-sm">
       <div class="card-body p-0">
         {% for msg in participation.messages|reverse %}
