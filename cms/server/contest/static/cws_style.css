@@ -210,6 +210,39 @@ section h3 {
     --bs-btn-disabled-border-color: #f8f9fa;
 }
 
+/*** Navbar */
+
+.navbar {
+    --bs-navbar-color: rgba(var(--bs-emphasis-color-rgb), 0.75);
+    --bs-navbar-disabled-color: rgba(var(--bs-emphasis-color-rgb), 0.5);
+    --bs-navbar-btn-active-color: rgba(var(--bs-emphasis-color-rgb), 0.9);
+    --bs-navbar-bg: var(--bs-body-bg);
+    background-color: var(--bs-navbar-bg);
+}
+
+[data-bs-theme=light] .navbar {
+    --bs-navbar-btn-active-bg: var(--bs-secondary-bg-subtle);
+}
+
+[data-bs-theme=dark] .navbar {
+    --bs-navbar-btn-active-bg: #41464b;
+}
+
+.navbar-btn {
+    --bs-btn-color: var(--bs-navbar-color);
+    --bs-btn-border-color: transparent;
+    --bs-btn-hover-color: var(--bs-navbar-hover-color);
+    --bs-btn-hover-bg: var(--bs-secondary-bg);
+    --bs-btn-hover-border-color: transparent;
+    --bs-btn-focus-shadow-rgb: var(--bs-secondary-bg-rgb);
+    --bs-btn-active-color: var(--bs-navbar-btn-active-color);
+    --bs-btn-active-bg: var(--bs-navbar-btn-active-bg);
+    --bs-btn-active-border-color: transparent;
+    --bs-btn-disabled-color: var(--bs-navbar-disabled-color);
+    --bs-btn-disabled-border-color: transparent;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+
 /*** Sidebar */
 .sidebar {
     flex: 0 0 20%;

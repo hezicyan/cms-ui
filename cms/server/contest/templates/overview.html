@@ -81,7 +81,7 @@
             {% endif %}
 
             {% if tokens_contest != TOKEN_MODE_DISABLED and tokens_tasks != TOKEN_MODE_DISABLED %}
-              <div class="mt-4 p-3 bg-light rounded">
+              <div class="mt-4 p-3 bg-body-secondary rounded">
                 {{ _build_token_section() }}
               </div>
             {% endif %}
@@ -148,7 +148,7 @@
     <div class="card-body p-0">
       <div class="table-responsive">
         <table class="table table-hover align-middle mb-0 rounded-3" style="table-layout: fixed;">
-          <thead class="table-light">
+          <thead>
             <tr>
               <th>{% trans %}Task{% endtrans %}</th>
               <th>{% trans %}Name{% endtrans %}</th>

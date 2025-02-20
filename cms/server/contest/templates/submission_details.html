@@ -49,12 +49,12 @@
 
 {% if sr.compilation_stdout is not none %}
 <h4>{% trans %}Standard output{% endtrans %}</h4>
-<pre class="bg-light border rounded-3 p-3 shadow"><code>{{ sr.compilation_stdout }}</code></pre>
+<pre class="bg-body-tertiary border rounded-3 p-3 shadow"><code>{{ sr.compilation_stdout }}</code></pre>
 {% endif %}
 
 {% if sr.compilation_stderr is not none %}
 <h4>{% trans %}Standard error{% endtrans %}</h4>
-<pre class="bg-light border rounded-3 p-3 shadow"><code>{{ sr.compilation_stderr }}</code></pre>
+<pre class="bg-body-tertiary border rounded-3 p-3 shadow"><code>{{ sr.compilation_stderr }}</code></pre>
 {% endif %}
 </div>
 {% endif %}

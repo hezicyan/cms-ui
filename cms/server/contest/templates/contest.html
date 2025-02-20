@@ -6,6 +6,20 @@
 
 {% block js %}
 <script>
+function getPreferredTheme() {
+    return localStorage.getItem("theme") ||
+        (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+}
+
+function setTheme(theme) {
+    if (theme) localStorage.setItem("theme", theme === "auto" ? "" : theme);
+    document.documentElement.setAttribute("data-bs-theme", getPreferredTheme());
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    setTheme();
+});
+
 var LANGUAGES = {
 {% for lang in contest.languages %}
     '{{ lang }}': {
@@ -85,53 +99,7 @@ window.addEventListener("resize", updatePosition);
 
 {% block body %}
 <div class="container-fluid d-flex flex-column min-vh-100 p-0">
-
-    <header id="navigation_bar" class="navbar navbar-expand-lg sticky-top bg-light border-bottom shadow-sm">
-        <nav class="container-xxl d-flex justify-content-between">
-            <a class="navbar-brand" href="{{ contest_url() }}">{{ contest.description }}</a>
-            <div class="d-inline-flex align-items-center me-2">
-{% if participation is defined %}
-                <span class="navbar-text me-2">
-                    {% trans first_name=user.first_name,
-                            last_name=user.last_name,
-                            username=user.username %}
-                        Logged in as <strong>{{ first_name }} {{ last_name }}</strong> <em>({{ username }})</em>
-                    {% endtrans %}
-                </span>
-                <form action="{{ contest_url("logout") }}" method="POST">
-                    {{ xsrf_form_html|safe }}
-                    <button type="submit" class="btn btn-light"><i class="bi bi-box-arrow-right h5"></i></button>
-                </form>
-{% endif %}
-{% if available_translations|length > 1 %}
-                <div class="hovermenu w-auto">
-                    <button type="button" class="btn btn-light"><i class="bi bi-translate h5"></i></button>
-                    <ul id="lang_dropdown_list" class="dropdown-menu overflow-y-auto w-auto shadow">
-                        <li class="mx-1">
-                            <button
-                                class="dropdown-item rounded{% if cookie_translation is none %} active{% endif %}"
-                                onclick="utils.switch_lang('')"
-                            >
-                                {% trans lang=automatic_translation.name %}Automatic ({{ lang }}){% endtrans %}
-                            </button>
-                        </li>
-                        <li><hr class="dropdown-divider"></li>
-                        {% for lang_code, t in available_translations|dictsort(by="key") %}
-                            <li class="mx-1">
-                                <button
-                                    class="dropdown-item rounded{% if t == cookie_translation %} active{% endif %}"
-                                    onclick="utils.switch_lang('{{ lang_code }}')"
-                                >
-                                    {{ t.name }}
-                                </button>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-{% endif %}
-            </div>
-        </nav>
-    </header>
+    {% include "components/navbar.html" %}
 
     <div class="toast-container position-fixed end-0 p-3" id="notifications"></div>
 
