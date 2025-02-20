@@ -190,6 +190,12 @@ section h3 {
     color: var(--bs-secondary-color);
 }
 
+/*** Table style */
+thead {
+    --bs-table-bg: var(--bs-tertiary-bg);
+    border-color: var(--bs-table-border-color);
+}
+
 /*** Task statement */
 
 /** Attachments */
