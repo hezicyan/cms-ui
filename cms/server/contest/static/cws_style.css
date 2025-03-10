@@ -348,26 +348,22 @@ td.token_rules p:last-child {
 
 .task_score {
     flex: 1 1 0;
-    border-width: medium;
 }
 
 .task_score .spinner-border {
     scale: 75%;
 }
 
-.task_score.score_0 {
-    background-color: hsla(0, 100%, 50%, 0.2);
-    border-color: hsla(0, 100%, 50%, 0.5);
+.task_score.score_0 .score {
+    color: var(--bs-danger);
 }
 
-.task_score.score_0_100 {
-    background-color: hsla(60, 100%, 50%, 0.2);
-    border-color: hsla(60, 100%, 50%, 0.5);
+.task_score.score_0_100 .score {
+    color: var(--bs-warning);
 }
 
-.task_score.score_100 {
-    background-color: hsla(120, 100%, 50%, 0.2);
-    border-color: hsla(120, 100%, 50%, 0.5);
+.task_score.score_100 .score {
+    color: var(--bs-success);
 }
 
 /*** Submit a solution */
