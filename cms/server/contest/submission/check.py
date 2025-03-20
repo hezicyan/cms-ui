@@ -87,9 +87,10 @@ def get_submission_count(
     return (int): the count.
 
     """
-    q = sql_session.query(func.count(cls.id))
-    q = _filter_submission_query(q, participation, contest, task, cls)
-    return q.scalar()
+    q = sql_session.query(cls)
+    q = _filter_submission_query(q, participation, contest, task, cls).all()
+    failed = sum(1 for s in q if s.get_result() is not None and s.get_result().compilation_failed())
+    return len(q) - failed
 
 
 def check_max_number(

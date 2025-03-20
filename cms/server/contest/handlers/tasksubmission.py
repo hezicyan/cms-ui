@@ -150,8 +150,10 @@ class TaskSubmissionsHandler(ContestHandler):
 
         submissions_left_task = None
         if task.max_submission_number is not None:
+            failed = sum(1 for s in submissions if s.get_result() is not None and
+                         s.get_result().compilation_failed())
             submissions_left_task = \
-                task.max_submission_number - len(submissions)
+                task.max_submission_number - len(submissions) + failed
 
         submissions_left = submissions_left_contest
         if submissions_left_task is not None and \
