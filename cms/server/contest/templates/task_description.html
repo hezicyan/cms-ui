@@ -107,7 +107,7 @@
 <tr>
         {% endif %}
     <td>{{ (l|to_language).name }}</td>
-    <td class="compilation_command_cell">
+    <td class="compilation_command_cell vstack gap-1">
 {% for cmd in c %}
         <pre class="bg-body-tertiary border rounded-1 px-2 py-1 mb-0"><code class="compilation_command text-wrap">{{ cmd|join(" ") }}</code></pre>
 {% endfor %}
