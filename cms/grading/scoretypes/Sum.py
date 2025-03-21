@@ -101,6 +101,90 @@ class Sum(ScoreTypeAlone):
     </tbody>
 </table>"""
 
+    BS5_TEMPLATE = """\
+<table class="table table-bordered table-hover table-striped testcase-list">
+    <thead>
+        <tr>
+            <th class="idx">
+                {% trans %}#{% endtrans %}
+            </th>
+            <th class="outcome">
+                {% trans %}Outcome{% endtrans %}
+            </th>
+            <th class="details">
+                {% trans %}Details{% endtrans %}
+            </th>
+{% if feedback_level == FEEDBACK_LEVEL_FULL %}
+            <th class="execution-time">
+                {% trans %}Execution time{% endtrans %}
+            </th>
+            <th class="memory-used">
+                {% trans %}Memory used{% endtrans %}
+            </th>
+{% endif %}
+        </tr>
+    </thead>
+    <tbody>
+{% for tc in details %}
+    {% if "outcome" in tc and "text" in tc %}
+        {% if tc["outcome"] == "Correct" %}
+        <tr class="correct">
+        {% elif tc["outcome"] == "Not correct" %}
+        <tr class="notcorrect">
+        {% else %}
+        <tr class="partiallycorrect">
+        {% endif %}
+            <td class="idx">{{ loop.index }}</td>
+            <td class="outcome text-nowrap fw-bold">
+        {% if tc["outcome"] == "Correct" %}
+                <i class="bi bi-check-lg me-1"></i>
+        {% elif tc["outcome"] == "Not correct" %}
+                <i class="bi bi-x-lg me-1"></i>
+        {% else %}
+                <i class="bi bi-x-lg me-1"></i>
+        {% endif %}
+                {{ _(tc["outcome"]) }}
+            </td>
+            <td class="details">
+                {{ tc["text"]|format_status_text }}
+            </td>
+        {% if feedback_level == FEEDBACK_LEVEL_FULL %}
+            <td class="execution-time text-truncate">
+            {% if "time" in tc and tc["time"] is not none %}
+                {{ tc["time"]|format_duration }}
+            {% else %}
+                {% trans %}N/A{% endtrans %}
+            {% endif %}
+            </td>
+            <td class="memory-used text-truncate">
+            {% if "memory" in tc and tc["memory"] is not none %}
+                {{ tc["memory"]|format_size }}
+            {% else %}
+                {% trans %}N/A{% endtrans %}
+            {% endif %}
+            </td>
+        {% endif %}
+        </tr>
+    {% else %}
+        <tr class="undefined">
+            <td class="idx">{{ loop.index }}</td>
+            <td
+                class="fw-bold text-body-secondary"
+        {% if feedback_level == FEEDBACK_LEVEL_FULL %}
+                colspan="4"
+        {% else %}
+                colspan="2"
+        {% endif %}
+            >
+                {% trans %}N/A{% endtrans %}
+            </td>
+        </tr>
+    {% endif %}
+{% endfor %}
+    </tbody>
+</table>
+"""
+
     def max_scores(self):
         """See ScoreType.max_score."""
         public_score = 0.0
