@@ -1,43 +1,47 @@
 {% set status = tr.get_status() if tr is defined else UserTestResult.COMPILING %}
 <tr data-user-test="{{ t_idx }}" data-status="{{ status }}">
 {% if show_date %}
-    <td class="datetime">{{ t.timestamp|format_datetime }}</td>
+    <td class="datetime font-monospace">{{ t.timestamp|format_datetime }}</td>
 {% else %}
-    <td class="time">{{ t.timestamp|format_time }}</td>
+    <td class="time font-monospace">{{ t.timestamp|format_time }}</td>
 {% endif %}
     <td class="status">
+        <div class="d-flex justify-content-between align-items-center gap-3">
 {% if status == UserTestResult.COMPILING %}
         {% trans %}Compiling...{% endtrans %}
+        {% include "components/spinner.html" %}
 {% elif status == UserTestResult.COMPILATION_FAILED %}
         {% trans %}Compilation failed{% endtrans %}
-        <a class="details">{% trans %}details{% endtrans %}</a>
+        {% include "components/user_test_detail_button.html" %}
 {% elif status == UserTestResult.EVALUATING %}
         {% trans %}Executing...{% endtrans %}
+        {% include "components/spinner.html" %}
 {% elif status == UserTestResult.EVALUATED %}
         {% trans %}Executed{% endtrans %}
-        <a class="details">{% trans %}details{% endtrans %}</a>
+        {% include "components/user_test_detail_button.html" %}
 {% endif %}
+        </div>
     </td>
 {% if tr is undefined or tr.execution_time is none %}
-    <td class="execution_time undefined">
+    <td class="execution_time undefined text-nowrap text-body-secondary">
         {% trans %}N/A{% endtrans %}
     </td>
 {% else %}
-    <td class="execution_time">
+    <td class="execution_time text-nowrap">
         {{ tr.execution_time|format_duration }}
     </td>
 {% endif %}
 {% if tr is undefined or tr.execution_memory is none %}
-    <td class="memory undefined">
+    <td class="memory undefined text-nowrap text-body-secondary">
         {% trans %}N/A{% endtrans %}
     </td>
 {% else %}
-    <td class="memory">
+    <td class="memory text-nowrap">
         {{ tr.execution_memory|format_size }}
     </td>
 {% endif %}
     <td class="input">
-        <a class="btn" href="{{ contest_url("tasks", task.name, "tests", t_idx, "input") }}">
+        <a class="btn btn-secondary" href="{{ contest_url("tasks", task.name, "tests", t_idx, "input") }}">
             {% trans %}Download{% endtrans %}
         </a>
     </td>
@@ -64,21 +68,20 @@
         {# the common case. Yet, it still allows the marginal case of both 'foo.%l' and 'foo.c' in the submission format. #}
         {% set files = t.files.keys()|list + t.managers.keys()|list %}
         {% if files|length == 0 %}
-        <a class="btn disabled">
+        <a class="btn btn-secondary disabled">
             {% trans %}None{% endtrans %}
         </a>
         {% elif files|length == 1 %}
             {% set filename = next(iter(t.files.keys())) %}
             {% set real_filename = filename|replace(".%l", (t.language|to_language).source_extension) %}
-        <a class="btn" href="{{ contest_url("tasks", task.name, "tests", t_idx, "files", real_filename) }}">
+        <a class="btn btn-secondary" href="{{ contest_url("tasks", task.name, "tests", t_idx, "files", real_filename) }}">
             {% trans %}Download{% endtrans %}
         </a>
         {% else %}
-        <div class="btn-group">
-            <a class="btn dropdown-toggle" data-toggle="dropdown">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
                 {% trans %}Download{% endtrans %}
-                <span class="caret"></span>
-            </a>
+            </button>
             <ul class="dropdown-menu">
             {% for filename in files %}
                 {% if t.language is not none %}
@@ -87,7 +90,10 @@
                     {% set real_filename = filename %}
                 {% endif %}
                 <li>
-                    <a href="{{ contest_url("tasks", task.name, "tests", t_idx, "files", real_filename) }}">
+                    <a
+                        class="dropdown-item rounded"
+                        href="{{ contest_url("tasks", task.name, "tests", t_idx, "files", real_filename) }}"
+                    >
                         {{ real_filename }}
                     </a>
                 </li>

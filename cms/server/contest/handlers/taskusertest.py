@@ -195,13 +195,11 @@ class UserTestStatusHandler(ContestHandler):
         if data["status"] == UserTestResult.COMPILING:
             data["status_text"] = self._("Compiling...")
         elif data["status"] == UserTestResult.COMPILATION_FAILED:
-            data["status_text"] = "%s <a class=\"details\">%s</a>" % (
-                self._("Compilation failed"), self._("details"))
+            data["status_text"] = self._("Compilation failed")
         elif data["status"] == UserTestResult.EVALUATING:
             data["status_text"] = self._("Executing...")
         elif data["status"] == UserTestResult.EVALUATED:
-            data["status_text"] = "%s <a class=\"details\">%s</a>" % (
-                self._("Executed"), self._("details"))
+            data["status_text"] = self._("Executed")
 
             if ur.execution_time is not None:
                 data["execution_time"] = \

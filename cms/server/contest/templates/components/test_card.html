@@ -1,0 +1,100 @@
+<div class="card shadow rounded-4">
+    <div class="card-body">
+        <h3 class="card-title">{% trans %}Submit a solution{% endtrans %}</h3>
+
+{% if user_tests_left[task.id] is not none %}
+        <p class="card-text">
+            {% trans user_tests_left=user_tests_left[task.id] %}You can submit {{ user_tests_left }} more test(s).{% endtrans %}
+        </p>
+{% endif %}
+
+    <hr>
+    <div class="d-flex gap-3">
+        <div class="col">
+            <form
+                enctype="multipart/form-data"
+                action="{{ contest_url("tasks", task.name, "test") }}"
+                method="POST"
+                class="d-flex flex-column gap-3"
+            >
+                {{ xsrf_form_html|safe }}
+{% for filename in task.submission_format + task_type.get_user_managers() %}
+                <div class="row">
+                    <label class="col-4 col-form-label text-truncate" for="input{{ loop.index }}">
+                        {{ filename|replace(".%l", "") }}
+                    </label>
+                    <div class="col-8">
+                        <input
+                            type="file"
+                            class="form-control"
+                            id="input{{ loop.index }}" name="{{ filename }}"
+                            onchange="CMS.CWSUtils.filter_languages($(this).parents('form').find('select[name=language] option'),
+                                                                    $(this).parents('form').find('input[type=file]').not('#input_file'))"
+                        />
+                    </div>
+                </div>
+{% endfor %}
+                <div class="row">
+                    <label class="col-4 col-form-label text-truncate" for="input_file">
+                        {% trans %}input{% endtrans %}
+                    </label>
+                    <div class="col-8">
+                        <input
+                            type="file"
+                            class="form-control"
+                            id="input_file" name="input"
+                        />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <select name="language" class="form-select">
+{% for lang in contest.languages %}
+                            <option value="{{ lang }}">{{ lang }}</option>
+{% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-6 offset-2">
+                        <div class="btn-group w-100">
+                            <button type="submit" class="btn btn-success">{% trans %}Submit{% endtrans %}</button>
+                            <button type="reset" class="btn btn-secondary">{% trans %}Reset{% endtrans %}</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+{% if two_column_submission %}
+        <div class="vr"></div>
+        <div class="col">
+            <form
+                enctype="multipart/form-data"
+                action="{{ contest_url("tasks", task.name, "test") }}"
+                method="POST"
+                class="d-flex flex-column gap-3"
+            >
+                {{ xsrf_form_html|safe }}
+                <div class="row">
+                    <label class="col-4 col-form-label text-truncate" for="input_zip">
+                        {% trans %}submission.zip{% endtrans %}
+                    </label>
+                    <div class="col-8">
+                        <input type="file" class="form-control" id="input_zip" name="submission"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 offset-6">
+                        <div class="btn-group w-100">
+                            <button type="submit" class="btn btn-success">{% trans %}Submit{% endtrans %}</button>
+                            <button type="reset" class="btn btn-secondary">{% trans %}Reset{% endtrans %}</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+{% endif %}
+    </div>
+
+    </div>
+</div>
+

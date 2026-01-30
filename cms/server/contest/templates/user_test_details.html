@@ -1,21 +1,30 @@
-
+<div class="container">
+<div class="d-flex flex-column">
 
 {% if tr is not none and tr.evaluated() %}
 <h3>{% trans %}Evaluation outcome{% endtrans %}</h3>{# TODO: trim long outputs and add facility to see raw #}
-<pre>{{ tr.evaluation_text|format_status_text }}</pre>
+<pre class="bg-body-tertiary border rounded-3 p-3 shadow"><code>{{ tr.evaluation_text|format_status_text }}</code></pre>
 {% endif %}
 
 {% if tr is not none and tr.compiled() %}
 <h3>{% trans %}Compilation output{% endtrans %}</h3>{# TODO: trim long outputs and add facility to see raw #}
-<table class="table table-bordered" style="table-layout: fixed;">
+<table class="table table-bordered table-striped shadow" style="table-layout: fixed;">
     <tbody>
         <tr>
-            <th>{% trans %}Compilation outcome:{% endtrans %}</th>
-            <td>{{ tr.compilation_text|format_status_text }}</td>
+            <th scope="row">{% trans %}Compilation outcome:{% endtrans %}</th>
+            <td>
+    {% if tr.get_status() == SubmissionResult.COMPILATION_FAILED %}
+                <i class="bi bi-x-lg text-danger"></i>
+    {% else %}
+                <i class="bi bi-check-lg text-success"></i>
+    {% endif %}
+                {{ tr.compilation_text|format_status_text }}
+            </td>
         </tr>
         <tr>
-            <th>{% trans %}Compilation time:{% endtrans %}</th>
+            <th scope="row">{% trans %}Compilation time:{% endtrans %}</th>
             <td>
+                <i class="bi bi-stopwatch"></i>
 {% if tr.compilation_time is none %}
     {% trans %}N/A{% endtrans %}
 {% else %}
@@ -25,6 +34,7 @@
         </tr>
             <th>{% trans %}Memory used:{% endtrans %}</th>
             <td>
+                <i class="bi bi-memory"></i>
 {% if tr.compilation_memory is none %}
     {% trans %}N/A{% endtrans %}
 {% else %}
@@ -36,10 +46,13 @@
 </table>
 {% if tr.compilation_stdout is not none %}
 <h4>{% trans %}Standard output{% endtrans %}</h4>
-<pre>{{ tr.compilation_stdout }}</pre>
+<pre class="bg-body-tertiary border rounded-3 p-3 shadow"><code>{{ tr.compilation_stdout }}</code></pre>
 {% endif %}
 {% if tr.compilation_stderr is not none %}
 <h4>{% trans %}Standard error{% endtrans %}</h4>
-<pre>{{ tr.compilation_stderr }}</pre>
+<pre class="bg-body-tertiary border rounded-3 p-3 shadow"><code>{{ tr.compilation_stderr }}</code></pre>
 {% endif %}
 {% endif %}
+
+</div>
+</div>
