@@ -209,7 +209,7 @@ submissions_download_allowed (bool): whether to allow users to download
         </a>
         {% else %}
         <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle w-100" data-bs-toggle="dropdown">
+            <button class="btn btn-secondary dropdown-toggle w-100" data-bs-toggle="dropdown" data-bs-popper-config='{"strategy":"fixed"}'>
                 {% trans %}Download{% endtrans %}
             </button>
             <ul class="dropdown-menu">

@@ -79,7 +79,7 @@
         </a>
         {% else %}
         <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" data-bs-popper-config='{"strategy":"fixed"}'>
                 {% trans %}Download{% endtrans %}
             </button>
             <ul class="dropdown-menu">
